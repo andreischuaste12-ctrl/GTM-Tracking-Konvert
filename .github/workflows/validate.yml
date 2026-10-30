@@ -26,12 +26,12 @@ jobs:
         run: python -m unittest discover -s tests -v
 
   external-link-check:
-    # Public documentation hosts may block automated link probes; keep the report visible
-    # without allowing transient remote availability to block repository changes.
-    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: lycheeverse/lychee-action@v2
+        # Some public documentation hosts block automated probes; retain the report without
+        # turning transient remote availability into a failing repository check.
+        continue-on-error: true
         with:
           args: --verbose --no-progress --max-retries 3 --timeout 20 README.md SKILL.md references/official-references.md
