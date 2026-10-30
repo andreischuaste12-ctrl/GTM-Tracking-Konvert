@@ -1,36 +1,127 @@
 {
   "skill_name": "gtm-tracking-konvert",
-  "evaluation_type": "scenario_specification_not_behaviorally_executed",
+  "evaluation_type": "scenario_specification_with_manual_assertions_not_behaviorally_executed",
+  "assertion_format": {
+    "must_include": "Claims or checks that a response must contain.",
+    "must_not_claim": "Unsupported conclusions the response must avoid."
+  },
   "evals": [
     {
       "id": 1,
       "prompt": "Audit this VTEX storefront's GTM container export: the GA4 purchase event appears duplicated.",
-      "expected_output": "Read-only review of the export; inspect tag types, triggers, exceptions, and sequencing rather than trusting names; do not infer duplication from aggregate counts alone; separate configuration, execution, and destination acceptance; do not reproduce personal data.",
-      "files": []
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inspect tag types, firing triggers, exceptions, sequencing, and paused status.",
+          "Separate configuration overlap from observed execution and destination counting.",
+          "State what evidence is needed to confirm destination deduplication."
+        ],
+        "must_not_claim": [
+          "A duplicate conversion is proven by aggregate counts or tag names alone.",
+          "Personal data from the export should be reproduced in the response."
+        ]
+      }
     },
     {
       "id": 2,
       "prompt": "Define the ecommerce data layer for view_item, add_to_cart, and purchase.",
-      "expected_output": "Inspect the existing implementation before proposing changes; do not assume event names, IDs, or structure; define a contract with grain, identity, currency/unit, consent, and resend policy.",
-      "files": []
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inspect the existing producer and data layer before proposing a contract.",
+          "Define event grain, identity, currency/unit, consent, and retry/deduplication behavior."
+        ],
+        "must_not_claim": [
+          "Unobserved field names, IDs, or payload structures are facts."
+        ]
+      }
     },
     {
       "id": 3,
       "prompt": "Publish the new container version to production now.",
-      "expected_output": "Require explicit publication authorization; distinguish workspace, created version, Preview, and live; review diff, affected dependencies, and rollback plan before acting.",
-      "files": []
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Require explicit authorization for publication.",
+          "Distinguish workspace edits, created version, Preview, and live state.",
+          "Review the diff, affected dependencies, target, and rollback plan."
+        ],
+        "must_not_claim": [
+          "A saved workspace or Preview is already published."
+        ]
+      }
     },
     {
       "id": 4,
       "prompt": "I want to move the Pixel and CAPI to GTM Server-side to collect more data.",
-      "expected_output": "Evaluate requirements and total cost without promising complete or attributable data; treat Web and Server as separate runtimes; consider consent, domain, deduplication with stable event_id, and outbound data minimization.",
-      "files": []
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Evaluate a specific requirement and total operating cost.",
+          "Treat Web and Server as separate runtimes and verify consent, routing, and destination behavior.",
+          "Require stable destination-compatible identity before claiming deduplication."
+        ],
+        "must_not_claim": [
+          "Server-side tagging guarantees complete data, attribution, or consent."
+        ]
+      }
     },
     {
       "id": 5,
       "prompt": "I need a GTM (go-to-market) plan to launch the product.",
-      "expected_output": "Do not activate this skill: GTM here means Google Tag Manager; treat the request as go-to-market strategy outside this skill.",
-      "files": []
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Clarify that this skill uses GTM to mean Google Tag Manager."
+        ],
+        "must_not_claim": [
+          "The request is about Google Tag Manager tracking."
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "prompt": "Audit the attached synthetic export. Two purchase tags share a trigger; one is paused and one references a missing trigger. Is a duplicate conversion proven?",
+      "files": ["evals/fixtures/duplicate-purchase-export.json"],
+      "assertions": {
+        "must_include": [
+          "Report the two configured purchase tags, shared trigger, paused state, and missing trigger reference.",
+          "Treat the unanchored regex as a review item if exact matching is intended.",
+          "Request Preview/request/destination evidence before concluding that a duplicate was counted."
+        ],
+        "must_not_claim": [
+          "The export alone proves that two conversions were sent or counted."
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "prompt": "The attached purchase has value 89900 BRL. What value should the contract send in major currency units?",
+      "files": ["evals/fixtures/centavos-event-contract.json"],
+      "assertions": {
+        "must_include": [
+          "Use the stated minor-unit contract and derive 899.00 BRL.",
+          "Preserve the stated currency and explain that the source contract, not magnitude, defines units."
+        ],
+        "must_not_claim": [
+          "89900 is necessarily a major-unit amount or that every value should be divided by 100."
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "prompt": "Review the attached consent-denied scenario. Should every analytics and ads request be absent?",
+      "files": ["evals/fixtures/consent-denied-case.json"],
+      "assertions": {
+        "must_include": [
+          "Inspect the approved policy, actual consent configuration, and Consent Mode behavior.",
+          "Verify requests and tag behavior in the denied state."
+        ],
+        "must_not_claim": [
+          "Denied consent always means no network request.",
+          "A consent signal alone proves legal compliance."
+        ]
+      }
     }
   ]
 }

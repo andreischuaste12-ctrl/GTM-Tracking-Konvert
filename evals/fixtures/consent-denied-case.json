@@ -1,0 +1,14 @@
+{
+  "scenario": "synthetic consent-denied browser session",
+  "consent_state": {
+    "analytics_storage": "denied",
+    "ad_storage": "denied",
+    "ad_user_data": "denied",
+    "ad_personalization": "denied"
+  },
+  "review_requirements": [
+    "Inspect the approved policy and actual GTM consent settings.",
+    "Do not infer that denied consent means no network request; verify the configured Consent Mode behavior.",
+    "Do not treat a consent signal or banner as proof of legal compliance."
+  ]
+}

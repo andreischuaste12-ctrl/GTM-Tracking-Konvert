@@ -1,7 +1,7 @@
 interface:
   display_name: "GTM Tracking Konvert"
-  short_description: "Designs and audits Google Tag Manager tracking"
-  default_prompt: "Use $gtm-tracking-konvert to implement or audit GTM tracking with event contracts and evidence-based validation."
+  short_description: "GTM tracking for VTEX, GA4, consent, and server-side"
+  default_prompt: "Use $gtm-tracking-konvert for Google Tag Manager work, including VTEX, GA4, Consent Mode, Meta Pixel/CAPI, and server-side tracking. Respond in the user's language."
 
 policy:
   allow_implicit_invocation: true

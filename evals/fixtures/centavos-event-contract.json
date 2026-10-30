@@ -1,0 +1,8 @@
+{
+  "scenario": "synthetic BRL purchase event",
+  "source_amount": 89900,
+  "source_unit": "minor",
+  "currency": "BRL",
+  "expected_major_amount": 899.00,
+  "contract_rule": "The source contract defines the amount as centavos. Never infer units from magnitude or divide every value by 100."
+}

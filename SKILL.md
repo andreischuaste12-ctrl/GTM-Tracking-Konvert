@@ -1,6 +1,6 @@
 ---
 name: gtm-tracking-konvert
-description: "Design, implement, and audit tracking in Google Tag Manager Web and server-side containers. Use for data layers, event contracts, GA4 and ecommerce, consent, deduplication, templates, the Tag Manager API, and server-side architecture. GTM means Google Tag Manager here; do not use this skill for go-to-market or analytics work that does not involve GTM."
+description: "Design, implement, and audit Google Tag Manager (GTM) tracking for Web and server-side containers. Use for VTEX, dataLayer, event contracts, GA4/ecommerce, Consent Mode, Meta Pixel/CAPI, Google Ads Enhanced Conversions, deduplication, templates, the Tag Manager API, and server-side architecture. GTM means Google Tag Manager, not go-to-market."
 metadata:
   short-description: "Google Tag Manager tracking engineering"
 ---
@@ -14,7 +14,7 @@ GTM executes and routes instrumentation. It does not replace a transactional sys
 ## Select the route and read only what the task needs
 
 - Tracking or data-layer design: [event contracts and architecture](references/event-contracts-architecture.md), then [Web workflow](references/workflow-web.md).
-- Export or workspace audit: [audit evidence](references/audit-evidence.md); consult [contracts, dependencies, and naming](references/contracts-dependencies-naming.md) when container organization matters.
+- JSON export audit: run [`inventory_gtm_export.py`](scripts/inventory_gtm_export.py) for a value-free structural summary, then use [audit evidence](references/audit-evidence.md); consult [contracts, dependencies, and naming](references/contracts-dependencies-naming.md) when container organization matters.
 - SPA, VTEX, consent, or browser investigation: [Web workflow](references/workflow-web.md).
 - Server-side clients, transformations, templates, infrastructure, or outbound-data privacy: [Server workflow](references/workflow-server.md).
 - Permissions, workspaces, environments, API, versioning, or publication: [container governance and release](references/container-governance-release.md).
@@ -27,6 +27,7 @@ GTM executes and routes instrumentation. It does not replace a transactional sys
 - Review of another model's recommendation: check every claim against current artifacts using [audit evidence](references/audit-evidence.md). Do not accept or reject the recommendation as a whole.
 - A documented technical failure: [technical pitfalls](references/technical-pitfalls.md).
 - A decision that depends on a platform feature, parameter, or requirement: verify [official references](references/official-references.md) and the destination's current documentation.
+- New event contract or audit deliverable: start from the [event contract template](assets/event-contract.template.md) or [audit report template](assets/audit-report.template.md).
 
 ## Engineering principles
 
@@ -46,7 +47,7 @@ GTM executes and routes instrumentation. It does not replace a transactional sys
 
 Use the sequence that fits the request. Do not turn an audit into a refactor.
 
-Carry out the requested work within its authorized scope. For implementation, modify available artifacts and validate the result; do not stop at recommendations when a change was requested. For an audit, remain read-only. Do not import, publish, send real events, or change production without explicit authorization for that action.
+Carry out the requested work within its authorized scope. For implementation, modify available artifacts and validate the result; do not stop at recommendations when a change was requested. For an audit, remain read-only. Respond in the user's language by default; preserve exact English product labels when needed.
 
 1. Fix the objective, scope, source system, destinations, container/ID, and source state (export, workspace, published, or observed in production).
 2. Read existing implementation and conventions. Separate facts, inferences, unknowns, and required data. Never invent event names, keys, IDs, CMPs, or contracts.
@@ -63,7 +64,7 @@ Carry out the requested work within its authorized scope. For implementation, mo
 - Do not assume `purchase`, `page_view`, `event_id`, a GA4 tag, Pixel/CAPI, or an HTTP response means what its name suggests. Verify payload and semantics at source and destination.
 - Do not infer missing or duplicate events from aggregate counts alone. Align grain, time period, timezone, filters, consent, identity, and platform rules.
 - Check references and dependencies before renaming, pausing, deleting, importing, or reorganizing objects. Folder and name changes do not fix tracking behavior.
-- Do not publish, import into a workspace, trigger a real purchase, change production consent, or make other external changes without applicable explicit authorization. Keep analysis read-only.
+- Do not publish, import into a workspace, trigger a real purchase, change production consent, or make other external changes without applicable explicit authorization. Keep analysis read-only unless the user explicitly authorizes a mutation.
 - Never repeat tokens, credentials, email addresses, phone numbers, or personal-data payloads in responses or files. Report presence, source, and risk without echoing values.
 - If an external analysis conflicts with the export or UI, identify the current snapshot, verify its hash/version, and reassess only affected components and dependencies.
 - When guiding a UI action, use exact observed names and give one executable step at a time. Distinguish saving a workspace from publishing.

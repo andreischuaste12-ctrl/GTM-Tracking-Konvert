@@ -4,7 +4,7 @@
 
 GTM Tracking Konvert turns measurement requirements into explicit event contracts, maintainable Google Tag Manager (GTM) implementations, and verifiable data flows. It covers GTM Web and server-side GTM, with a focus on Google Analytics 4 (GA4), Google Ads, consent-aware behavior, ecommerce, conversion deduplication, and implementation quality.
 
-This repository is the project's operating guide and reference library. It currently contains documentation only; it is not an application, a published GTM container, or a service that runs tracking code.
+This repository packages the project's operating guide, a routed skill, focused references, reusable templates, synthetic evaluation fixtures, and a read-only GTM export inventory tool. It is not an application, a published GTM container, or a service that runs tracking code.
 
 ## Mission
 
@@ -19,6 +19,7 @@ Deliver tracking implementations that are accurate, privacy-aware, testable, and
 - Server-side GTM architecture, request clients, transformations, forwarding, and destination controls.
 - Tag templates, Tag Manager API workflows, configuration audits, and troubleshooting.
 - Implementation specifications, QA plans, release notes, rollback steps, and monitoring requirements.
+- Structural inventory of GTM exports with a SHA-256 digest, counts, and relationship warnings.
 
 ## What this project does not cover
 
@@ -92,6 +93,8 @@ Each implementation or audit must produce the relevant subset of these artifacts
 - QA matrix with expected and observed results.
 - Findings prioritized by impact, with concrete remediation steps.
 - Release, rollback, ownership, and monitoring notes.
+
+Reusable event-contract and audit-report templates are in [`assets/`](assets/). Run the read-only inventory tool with `python3 scripts/inventory_gtm_export.py path/to/container-export.json`; it reports structural checks only and does not validate runtime behavior, destination acceptance, consent compliance, or reconciliation. The synthetic scenarios in [`evals/`](evals/) include manual response criteria and are not an automated model-evaluation harness.
 
 ## Official references
 

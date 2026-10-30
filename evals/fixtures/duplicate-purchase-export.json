@@ -1,0 +1,50 @@
+{
+  "exportFormatVersion": 2,
+  "containerVersion": {
+    "container": {
+      "publicId": "GTM-SYNTHETIC",
+      "name": "Synthetic evaluation container"
+    },
+    "tag": [
+      {
+        "tagId": "1",
+        "name": "Synthetic GA4 purchase Web",
+        "type": "gaawe",
+        "paused": false,
+        "firingTriggerId": ["10"],
+        "parameter": [
+          {"type": "TEMPLATE", "key": "eventName", "value": "purchase"}
+        ]
+      },
+      {
+        "tagId": "2",
+        "name": "Synthetic GA4 purchase Server",
+        "type": "gaawe",
+        "paused": true,
+        "firingTriggerId": ["10", "99"],
+        "parameter": [
+          {"type": "TEMPLATE", "key": "eventName", "value": "purchase"}
+        ]
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "10",
+        "name": "Synthetic purchase event",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {"type": "TEMPLATE", "key": "arg0", "value": "{{_event}}"},
+              {"type": "TEMPLATE", "key": "arg1", "value": "purchase"}
+            ]
+          }
+        ]
+      }
+    ],
+    "variable": [],
+    "folder": [],
+    "customTemplate": []
+  }
+}
