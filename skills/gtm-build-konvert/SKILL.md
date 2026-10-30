@@ -50,8 +50,9 @@ not restate them here.
 3. **Check, then generate** (commands run from the repository root):
 
    ```bash
-   python3 skills/gtm-build-konvert/scripts/build_gtm_container.py spec.json
-   python3 skills/gtm-build-konvert/scripts/build_gtm_container.py spec.json --output container.json --base target-export.json
+   BUILD=skills/gtm-build-konvert/scripts/build_gtm_container.py
+   python3 "$BUILD" spec.json
+   python3 "$BUILD" spec.json --output container.json --base target-export.json
    ```
 
    The first call only validates. With `--base` (a fresh export of the target container) IDs
