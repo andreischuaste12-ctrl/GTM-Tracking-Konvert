@@ -1,13 +1,15 @@
 ---
 name: gtm-tracking-konvert
 description: >-
-  Design, implement, and audit Google Tag Manager (GTM) tracking for websites, web applications,
-  SaaS products, lead-generation flows, content experiences, and commerce using Web or server-side
-  containers. Use for dataLayer, GA4, Consent Mode, Meta Pixel/CAPI, Google Ads conversions,
-  deduplication, templates, the Tag Manager API, and server-side architecture. VTEX, Shopify, and
-  WooCommerce are example source integrations, not required platforms. GTM means Google Tag
-  Manager, not go-to-market. Do not invoke for GA4 reporting without GTM, Adobe Analytics, Segment,
-  or go-to-market strategy.
+  Design, implement, and audit Google Tag Manager (GTM) tracking for websites, apps, SaaS,
+  lead generation, content, and commerce using Web or server-side containers. Use for dataLayer,
+  event tracking, GA4, Google Ads conversions, Enhanced Conversions, Conversion Linker and click IDs,
+  Meta Pixel/CAPI and event_id deduplication, Consent Mode v2, CMP behavior, SPAs, server-side event
+  routing, templates, the Tag Manager API, container exports, and workspace/version/release reviews.
+  VTEX, Shopify, and WooCommerce are example source integrations, not defaults. Use for missing or
+  duplicate events, consent checks, conversion reconciliation, and release audits. GTM means Google
+  Tag Manager, not go-to-market. Do not invoke for go-to-market strategy, GA4 reporting without GTM,
+  Adobe Analytics, or Segment-only implementations.
 metadata:
   short-description: "Google Tag Manager tracking engineering"
 ---
@@ -63,11 +65,13 @@ references](references/official-references.md) and the destination's current doc
 - New event contract or audit deliverable: start from the [event contract
 template](assets/event-contract.template.md) or [audit report
 template](assets/audit-report.template.md).
+- Event QA plan or release test matrix: use the [QA matrix template](assets/qa-matrix.template.md).
 - Ambiguous or multi-step request: use the [task decision
 matrix](references/task-decision-matrix.md) to select a minimal workflow.
 - Revenue reconciliation: use the [reconciliation template](assets/reconciliation.template.md) and
 [ecommerce guidance](references/ecommerce-money-reconciliation.md).
 - Example prompt/response patterns: [synthetic task patterns](examples/task-patterns.md).
+- Filled artifact examples: see [synthetic examples](examples/).
 
 ## Invocation and context policy
 

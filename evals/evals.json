@@ -286,6 +286,21 @@
           "Ecommerce funnel events or order identifiers are required for content measurement."
         ]
       }
+    },
+    {
+      "id": 20,
+      "prompt": "The Google Ads conversion request returned HTTP 200. Can I mark the conversion as accepted and counted?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Classify HTTP 200 as transport evidence only, not destination acceptance or conversion counting.",
+          "Identify the appropriate destination diagnostics and reporting evidence, including processing delay where applicable.",
+          "Keep request delivery, action acceptance, Ads reporting, and financial reconciliation as separate states."
+        ],
+        "must_not_claim": [
+          "An HTTP 200 response alone proves the conversion was accepted, counted, or reconciled."
+        ]
+      }
     }
   ]
 }

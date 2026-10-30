@@ -1,11 +1,12 @@
 interface:
   display_name: "GTM Tracking Konvert"
-  short_description: "GTM tracking for websites, apps, SaaS, leads, and commerce"
+  short_description: "GTM tracking for sites, apps, SaaS, leads, and commerce"
   default_prompt: >-
     Use $gtm-tracking-konvert for Google Tag Manager work across websites, web apps, SaaS,
     lead-generation, content, and commerce projects. Determine source events from the actual
     implementation; VTEX and other commerce platforms are examples, not assumptions. Covers GA4,
-    Consent Mode, Meta Pixel/CAPI, Google Ads, and server-side tracking. Do not use it for
+    Consent Mode v2, Meta Pixel/CAPI, Google Ads Conversion Linker/Enhanced Conversions, and
+    server-side tracking. Do not use it for
     go-to-market, standalone analytics, Adobe Analytics, or Segment. Read only routed references
     and respond in the user's language.
 

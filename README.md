@@ -139,7 +139,7 @@ Each implementation or audit must produce the relevant subset of these artifacts
 - Findings prioritized by impact, with concrete remediation steps.
 - Release, rollback, ownership, and monitoring notes.
 
-Reusable event-contract, audit-report, and reconciliation templates are in [`assets/`](assets/);
+Reusable event-contract, QA-matrix, audit-report, and reconciliation templates are in [`assets/`](assets/);
 filled audit and inventory examples are in [`examples/`](examples/). Run
 the read-only inventory tool with `python3 scripts/inventory_gtm_export.py
 path/to/container-export.json`; it reports structural checks only and does not validate runtime
