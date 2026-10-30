@@ -1,75 +1,73 @@
 ---
-name: gtm-organizador-konvert
-description: "Projeta, implementa e audita tracking no Google Tag Manager Web e Server-side. Acione para dataLayer, contratos de eventos, GA4/e-commerce, consentimento, deduplicação, templates, GTM API ou arquitetura Server-side. GTM aqui significa Google Tag Manager; não use para Go-to-Market ou analytics sem GTM."
+name: gtm-tracking-konvert
+description: "Design, implement, and audit tracking in Google Tag Manager Web and server-side containers. Use for data layers, event contracts, GA4 and ecommerce, consent, deduplication, templates, the Tag Manager API, and server-side architecture. GTM means Google Tag Manager here; do not use this skill for go-to-market or analytics work that does not involve GTM."
 metadata:
-  short-description: "Engenharia de dados e tracking com GTM"
+  short-description: "Google Tag Manager tracking engineering"
 ---
 
-# Engenharia de dados e tracking com GTM
+# Google Tag Manager tracking engineering
 
-Trate tracking como um sistema de dados de produção: eventos representam fatos de negócio com semântica, identidade, momento, unidade, origem e consumidores definidos. O objetivo é produzir dados corretos, minimizados, observáveis e reconciliáveis — não maximizar quantidade de tags nem buscar uma promessa de coleta perfeita.
+Treat tracking as a production data system. Events represent business facts with defined meaning, identity, timing, unit, source, and consumers. Produce accurate, minimized, observable, and reconcilable data. Do not maximize tag count or promise perfect collection.
 
-GTM executa e encaminha instrumentação. Não substitui o sistema transacional, uma camada de integração durável, o warehouse, a governança de dados, a CMP ou a validação financeira. GTM Server muda onde parte do processamento ocorre; por si só não torna dados completos, consentidos, atribuíveis ou aceitos por destinos.
+GTM executes and routes instrumentation. It does not replace a transactional system, durable integration layer, data warehouse, data governance, consent management platform (CMP), or financial reconciliation. Server-side GTM changes where some processing occurs; it does not make data complete, consented, attributable, or accepted by destinations.
 
-## Escolha a rota e leia apenas o apoio necessário
+## Select the route and read only what the task needs
 
-- Projetar tracking ou dataLayer: [contratos e arquitetura](references/contratos-e-arquitetura.md), depois [workflow Web](references/workflow-web.md).
-- Auditar export ou workspace: [auditoria e evidência](references/auditoria-evidencia.md); consulte [nomes e estrutura](references/contratos-e-nomenclatura.md) se houver organização do container.
-- Investigar SPA, VTEX, consentimento ou navegador: [workflow Web](references/workflow-web.md).
-- Server-side, Clients, Transformations, templates, infraestrutura ou privacidade de saída: [workflow Server](references/workflow-server.md).
-- Permissões, workspaces, ambientes, API, versionamento e publicação: [governança e release](references/governanca-e-release.md).
-- Desenvolver/revisar template customizado Web ou Server: [templates e API](references/templates-e-api.md).
-- Avaliar, provisionar ou operar arquitetura Server-side e custos: [desenho Server-side](references/desenho-server-side.md).
-- CMP, Consent Mode ou políticas de permissão da página: consulte [fontes oficiais](references/fontes-oficiais.md) e [workflow Web](references/workflow-web.md); leia as referências de templates e Server-side conforme o escopo.
-- E-commerce, pedidos, reembolso, moeda, receita e conciliação: [e-commerce e conciliação](references/ecommerce-e-conciliacao.md).
-- Plano de mensuração, KPIs e definições financeiras: [métricas e negócio](references/metricas-e-negocio.md).
-- Alteração, importação, publicação, teste de produção ou pedido para agir pela interface: [modo de trabalho e release](references/modo-de-trabalho.md).
-- Avaliar recomendação de outro modelo: confira cada alegação contra artefatos atuais; use [auditoria e evidência](references/auditoria-evidencia.md). Não aceite nem rejeite a análise em bloco.
-- Erro técnico específico já documentado: [lições técnicas](references/licoes-tecnicas.md).
-- Decisão dependente de feature, parâmetro ou requisito de plataforma: confirme [fontes oficiais](references/fontes-oficiais.md) e a documentação vigente do destino.
+- Tracking or data-layer design: [event contracts and architecture](references/event-contracts-architecture.md), then [Web workflow](references/workflow-web.md).
+- Export or workspace audit: [audit evidence](references/audit-evidence.md); consult [contracts, dependencies, and naming](references/contracts-dependencies-naming.md) when container organization matters.
+- SPA, VTEX, consent, or browser investigation: [Web workflow](references/workflow-web.md).
+- Server-side clients, transformations, templates, infrastructure, or outbound-data privacy: [Server workflow](references/workflow-server.md).
+- Permissions, workspaces, environments, API, versioning, or publication: [container governance and release](references/container-governance-release.md).
+- Custom Web or Server template development/review: [custom templates and APIs](references/custom-templates-api.md).
+- Server-side architecture, provisioning, operations, or cost: [server-side design and operations](references/server-side-design-operations.md).
+- CMP, Consent Mode, or page permission policy: consult [official references](references/official-references.md) and the [Web workflow](references/workflow-web.md); read template and Server guidance as needed.
+- Ecommerce, orders, refunds, currency, revenue, or reconciliation: [ecommerce, money, and reconciliation](references/ecommerce-money-reconciliation.md).
+- Measurement plans, KPIs, or financial definitions: [business metrics and measurement](references/business-metrics-measurement.md).
+- Changes, imports, publication, production tests, or UI actions: [working mode and release](references/working-mode-release.md).
+- Review of another model's recommendation: check every claim against current artifacts using [audit evidence](references/audit-evidence.md). Do not accept or reject the recommendation as a whole.
+- A documented technical failure: [technical pitfalls](references/technical-pitfalls.md).
+- A decision that depends on a platform feature, parameter, or requirement: verify [official references](references/official-references.md) and the destination's current documentation.
 
-## Princípios de engenharia
+## Engineering principles
 
-1. **Comece no fato de negócio e na fonte.** Descubra quem produz o evento, quando o fato é verdadeiro, qual sistema é fonte da verdade e quais consumidores precisam dele. Não crie evento GTM para compensar um fato ausente ou ambíguo no produtor.
-2. **Defina contrato antes de mapear tags.** Especifique nome, grão, gatilho semântico, identidade, timestamp e fuso quando relevante, propriedades, tipos, unidades, nulabilidade, consentimento, destinos e política de duplicação. Consulte [contratos e arquitetura](references/contratos-e-arquitetura.md).
-3. **Trace a linhagem de ponta a ponta.** Para cada evento crítico: produtor → dataLayer/request → variável ou Client → acionador → tag → request de saída → destino → relatório ou sistema de conciliação. Registre onde cada etapa foi observada.
-4. **Preserve a separação Web/Server.** São containers e runtimes diferentes. Client interpreta requisições no Server e produz event data; tags de saída consomem esses dados. Não presuma equivalência entre variáveis, acionadores, consent checks ou Preview nos dois lados.
-5. **Privacidade por finalidade e minimização.** Identifique dados pessoais e identificadores, justifique cada destino, controle consentimento e remova campos desnecessários antes da saída. Hashing não anonimiza por si só. Não exponha valores sensíveis em logs, exports de resposta ou exemplos.
-6. **Projete para qualidade e manutenção.** Evite regra de negócio duplicada em muitas tags, nomes que escondem comportamento, conversões implícitas de moeda, fallback que transforma inválido em zero e deduplicação baseada em temporizador sem identidade estável.
-7. **Valide cada camada com evidência adequada.** Configuração não comprova execução; execução não comprova request; request não comprova aceite; aceite não comprova contabilização nem conciliação. Use os estados e limites definidos em [auditoria e evidência](references/auditoria-evidencia.md).
-8. **Consulte a documentação oficial atual quando a decisão depende de plataforma.** APIs, requisitos de destino, consentimento, parâmetros recomendados, deduplicação, limites e infraestrutura mudam. Use as fontes oficiais indicadas nas referências e verifique a página vigente antes de orientar produção.
-9. **Governe mudanças como releases.** Distingua workspace, versão criada, ambiente de teste e versão live. Faça diff, valide dependências e conflitos, registre escopo e plano de reversão; criar uma versão não é publicar e Preview não é produção. Veja [governança e release](references/governanca-e-release.md).
-10. **Trate custom templates como código executável com capacidade limitada.** Leia implementação, campos, permissões e proveniência; valide no sandbox e com testes próprios. Um template da Gallery ou repositório upstream não prova equivalência ao código instalado. Veja [templates e API](references/templates-e-api.md).
-11. **Avalie Server-side por requisitos e custo total.** Defina quais dados precisam ser processados/roteados no servidor e quais controles isso realmente permite. Inclua origem do evento, consentimento, domínio, disponibilidade, observabilidade, latência, limites, escalabilidade e custo. Veja [desenho Server-side](references/desenho-server-side.md).
+1. **Start with the business fact and its source.** Find who produces the event, when it becomes true, which system is authoritative, and who consumes it. Do not create a GTM event to compensate for a missing or ambiguous source fact.
+2. **Define the contract before mapping tags.** Specify name, grain, semantic trigger, identity, timestamp and timezone when relevant, properties, types, units, nullability, consent, destinations, and duplicate policy. See [event contracts and architecture](references/event-contracts-architecture.md).
+3. **Trace end-to-end lineage.** For each critical event, map producer → data layer/request → variable or Client → trigger → tag → outbound request → destination → report or reconciliation system. Record the evidence for every observed step.
+4. **Keep Web and Server separate.** They are different containers and runtimes. A Server Client interprets requests and produces event data; outbound tags consume that data. Do not assume variables, triggers, consent checks, or Preview behave identically in both.
+5. **Apply purpose limitation and minimization.** Identify personal data and identifiers, justify every destination, enforce consent, and remove unnecessary fields before forwarding. Hashing alone is not anonymization. Never expose sensitive values in logs, exports, responses, or examples.
+6. **Design for quality and maintenance.** Avoid duplicating business rules across tags, names that conceal behavior, implicit currency conversions, fallbacks that turn invalid values into zero, and timer-based deduplication without stable identity.
+7. **Validate each layer with the right evidence.** Configuration does not prove execution; execution does not prove a request; a request does not prove acceptance; acceptance does not prove reporting or reconciliation. Use the evidence levels and limits in [audit evidence](references/audit-evidence.md).
+8. **Verify platform-dependent decisions against current official documentation.** APIs, destination requirements, consent, recommended parameters, deduplication, limits, and infrastructure change. Check the current page before advising on production.
+9. **Govern changes as releases.** Distinguish workspaces, created versions, test environments, and live versions. Review diffs, dependencies, conflicts, scope, and rollback. Creating a version is not publishing; Preview is not production. See [container governance and release](references/container-governance-release.md).
+10. **Treat custom templates as executable code with limited capabilities.** Review implementation, fields, permissions, and provenance; validate in the sandbox and with dedicated tests. A Gallery or upstream template is not proof that installed code is equivalent. See [custom templates and APIs](references/custom-templates-api.md).
+11. **Evaluate Server-side by requirements and total cost.** Define what must be processed or routed on the server and which controls that actually provides. Include event source, consent, domain, availability, observability, latency, limits, scalability, and cost. See [server-side design and operations](references/server-side-design-operations.md).
 
-## Sequência de trabalho
+## Work sequence
 
-Use a ordem adequada ao pedido, sem transformar uma auditoria em refatoração:
+Use the sequence that fits the request. Do not turn an audit into a refactor.
 
-Execute o trabalho solicitado no escopo autorizado. Em pedido de implementação, altere os artefatos disponíveis e valide o resultado; não encerre com recomendações quando a mudança foi pedida. Em pedido de auditoria, mantenha leitura. Não importe, publique, dispare eventos reais ou altere produção sem autorização explícita para essa ação.
+Carry out the requested work within its authorized scope. For implementation, modify available artifacts and validate the result; do not stop at recommendations when a change was requested. For an audit, remain read-only. Do not import, publish, send real events, or change production without explicit authorization for that action.
 
-1. Fixe o objetivo, escopo, sistema de origem, destinos, container/ID e estado da fonte (export, workspace, publicado ou observado em produção).
-2. Leia implementação e convenções existentes. Marque fatos, inferências, desconhecidos e dados necessários. Não invente nomes de eventos, chaves, IDs, CMPs ou contratos.
-3. Defina ou valide o contrato do evento e o resultado de negócio esperado, incluindo grão, identidade, moeda/unidade e tratamento de reenvio.
-4. Mapeie dependências Web e Server: ordem do dataLayer, variáveis resolvidas, condições, exceções, consentimento, template/permissões e rotas de saída.
-5. Faça a menor alteração coerente com o contrato e preserve comportamento não relacionado. Separe proposta, alteração em arquivo, alteração no workspace e publicação.
-6. Valide cenários positivos, negativos e repetidos, consentimento aplicável, campos ausentes/inválidos, tipos/unidades, SPA e eventuais rotas alternativas. Use export offline, testes de template, Preview, requests, ferramentas do destino e conciliação conforme a pergunta.
-7. Relate o que foi observado, o que passou/falhou, o alcance do teste, diferenças por destino e o que ainda depende de ambiente ou acesso externo.
-8. Em mudanças de container, documente estado inicial/final, diff, dependências afetadas, validação, versão/workspace e se foi apenas salvo, versionado, enviado a ambiente ou publicado.
+1. Fix the objective, scope, source system, destinations, container/ID, and source state (export, workspace, published, or observed in production).
+2. Read existing implementation and conventions. Separate facts, inferences, unknowns, and required data. Never invent event names, keys, IDs, CMPs, or contracts.
+3. Define or verify the event contract and expected business outcome, including grain, identity, currency/unit, and resend behavior.
+4. Map Web and Server dependencies: data-layer ordering, resolved variables, conditions, exceptions, consent, templates/permissions, and outbound routes.
+5. Make the smallest coherent change and preserve unrelated behavior. Distinguish a proposal, file edit, workspace edit, and publication.
+6. Validate positive, negative, and repeated cases; applicable consent states; missing/invalid fields; types/units; SPA behavior; and alternate routes. Use offline exports, template tests, Preview, requests, destination tools, and reconciliation as relevant.
+7. Report observations, passed/failed checks, test scope, destination differences, and remaining environment or access dependencies.
+8. For container changes, document before/after state, diff, affected dependencies, validation, version/workspace, and whether the change was saved, versioned, sent to an environment, or published.
 
-## Regras de interpretação e risco
+## Interpretation and risk rules
 
-- Leia tipo, destino, configuração, acionadores, exceções, consentimento, sequência e status da tag. Nome de objeto não prova comportamento.
-- Não assuma que `purchase`, `page_view`, `event_id`, uma tag GA4, um Pixel/CAPI ou resposta HTTP significam o que o nome sugere. Confirme payload e semântica na origem e no destino.
-- Não conclua que evento faltou ou duplicou apenas comparando contagens agregadas. Compare mesmo grão, período, fuso, filtros, consentimento, identidade e regras de cada plataforma.
-- Verifique referências e dependências antes de renomear, pausar, apagar, importar ou reorganizar objetos. Pasta e nome não corrigem tracking.
-- Não publique, importe em workspace, dispare compra real, altere consentimento de produção nem faça outras mudanças externas sem autorização explícita aplicável. Para análise, mantenha somente leitura.
-- Nunca reproduza tokens, credenciais, e-mails, telefone ou payload pessoal em resposta ou arquivo. Informe presença, origem e risco sem ecoar o valor.
-- Se uma análise externa divergir do export ou UI, fixe o snapshot atual, confirme hash/versão e reavalie apenas os componentes e dependências afetados.
-- Ao orientar alguém pela interface, use nomes exatos observados e forneça uma etapa executável por vez. Diferencie salvar no workspace de publicar.
+- Read tag type, destination, configuration, triggers, exceptions, consent, sequencing, and status. An object's name does not prove its behavior.
+- Do not assume `purchase`, `page_view`, `event_id`, a GA4 tag, Pixel/CAPI, or an HTTP response means what its name suggests. Verify payload and semantics at source and destination.
+- Do not infer missing or duplicate events from aggregate counts alone. Align grain, time period, timezone, filters, consent, identity, and platform rules.
+- Check references and dependencies before renaming, pausing, deleting, importing, or reorganizing objects. Folder and name changes do not fix tracking behavior.
+- Do not publish, import into a workspace, trigger a real purchase, change production consent, or make other external changes without applicable explicit authorization. Keep analysis read-only.
+- Never repeat tokens, credentials, email addresses, phone numbers, or personal-data payloads in responses or files. Report presence, source, and risk without echoing values.
+- If an external analysis conflicts with the export or UI, identify the current snapshot, verify its hash/version, and reassess only affected components and dependencies.
+- When guiding a UI action, use exact observed names and give one executable step at a time. Distinguish saving a workspace from publishing.
 
-## Entrega de auditoria
+## Audit delivery
 
-Resuma: fonte e estado analisados; objetivo e escopo; fatos com evidência; problemas por impacto e confiança; itens corretos a preservar; plano de correção por dependência; validação realizada e seus limites; próximos dados necessários. Para mudanças, liste arquivos ou objetos alterados e o estado final (local, workspace, Preview, destino, conciliação ou publicado). Nunca declare produção validada com base apenas em configuração, simulação ou Preview.
-
-
+Summarize the source and state examined; objective and scope; evidence-backed facts; issues by impact and confidence; correct items to preserve; dependency-ordered remediation; validation and its limits; and additional data needed. For changes, list modified files or objects and their final state (local, workspace, Preview, destination, reconciled, or published). Never claim production validation based only on configuration, simulation, or Preview.

@@ -1,20 +1,20 @@
-# Container GTM Server
+# GTM Server container
 
-O Server recebe eventos e encaminha/transforma dados. Identifique o client que aceitou cada request, os dados recebidos, tags de saída, transformação, consentimento e destino. Uma tag de encaminhamento GA4 não é uma conversão Google Ads nem uma confirmação de que o evento foi contado.
+The Server container receives events and forwards/transforms data. Identify the Client that claimed each request, the data received, outbound tags, transformations, consent, and destination. A GA4 forwarding tag is not a Google Ads conversion and does not confirm an event was counted.
 
-## Ordem de revisão
+## Review order
 
-1. Confirmar container Server, domínio de tagging, workspace/publicação e transportador Web real.
-2. Inspecionar clients e precedência: qual client reivindica request; diferenciar GA4 de outros formatos.
-3. Inspecionar dados de evento recebidos e client name no Preview; não inferir conteúdo a partir do nome do acionador.
-4. Conferir acionadores, regex, filtros e tags dedicadas/genéricas. Excluir eventos auxiliares ou roteados por tags dedicadas de uma regra genérica quando causa sobreposição, depois de verificar impacto.
-5. Conferir transformações e saídas: eventos, `event_id`, `transaction_id`, itens, moedas, valor, consentimento e configurações atuais do template.
-6. Conferir as respostas externas e deduplicação separadamente.
+1. Confirm Server container, tagging domain, workspace/publication, and actual Web transport.
+2. Inspect Clients and precedence: which Client claims each request; distinguish GA4 from other formats.
+3. Inspect received event data and Client name in Preview; do not infer payload from a trigger name.
+4. Check triggers, regex, filters, and dedicated/generic tags. Exclude auxiliary events or events routed by dedicated tags from a generic rule when they overlap, after checking impact.
+5. Check transformations and outputs: events, `event_id`, `transaction_id`, items, currencies, value, consent, and current template settings.
+6. Check external responses and deduplication separately.
 
-Regex de allowlist de eventos deve ser ancorada (`^(eventA|eventB)$`) se a intenção for match exato. `purchase` dentro de `.+purchase` também pode aceitar `fake_purchase`; valide nomes auxiliares e capitalize exatamente. “Todos os eventos personalizados” é amplo; aplique filtros de client e eventos necessários.
+Anchor event allowlist regexes (`^(eventA|eventB)$`) when exact matching is intended. `purchase` inside `.+purchase` can also match `fake_purchase`; validate helper names and capitalization exactly. “All custom events” is broad; filter by Client and required events.
 
-Use o template instalado como fonte efetiva. Documentação do template GitHub ou versão upstream não prova que o template personalizado na conta é idêntico. Examine permissões, variáveis, template code, versão de API, URLs, campos e credenciais. Não expor tokens em código, logs, outputs ou exemplos. Usar constantes/cofre suportado e confirmar rotação diretamente no fornecedor quando credencial já foi exposta.
+Treat the installed template as the effective source. GitHub documentation or an upstream template version does not prove an account's custom template is identical. Inspect permissions, variables, template code, API version, URLs, fields, and credentials. Never expose tokens in code, logs, outputs, or examples. Use supported constants/secret storage and confirm rotation with the provider when a credential has been exposed.
 
-Antes de atualizar um template, comparar versão do código original, mudança local e permissões atuais. Não substituir custom template pela última versão presumida. Preservar tags pausadas, escopos de permissão e acionadores existentes até que a mudança exata seja conhecida.
+Before updating a template, compare the original code version, local changes, and current permissions. Do not replace a custom template with an assumed latest version. Preserve paused tags, permission scopes, and existing triggers until the exact change is understood.
 
-Evidência de `POST` com status 200/204 indica resposta HTTP nesse teste. Para Meta, se presente, conferir `events_received` e mensagens. Isso não garante contabilização em Ads Manager, deduplicação ou persistência em relatórios GA4. Diferencie aceitação na camada Server, resposta do fornecedor, Test Events e relatório final.
+A `POST` response with status 200/204 proves an HTTP response in that test. For Meta, when present, inspect `events_received` and messages. This does not prove counting in Ads Manager, deduplication, or persistence in GA4 reports. Distinguish Server acceptance, provider response, Test Events, and final reporting.

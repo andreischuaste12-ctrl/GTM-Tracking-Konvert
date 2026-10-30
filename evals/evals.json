@@ -1,35 +1,35 @@
 {
-  "skill_name": "gtm-organizador-konvert",
+  "skill_name": "gtm-tracking-konvert",
   "evaluation_type": "scenario_specification_not_behaviorally_executed",
   "evals": [
     {
       "id": 1,
-      "prompt": "Audite este export do container GTM da loja VTEX: o purchase do GA4 parece duplicado.",
-      "expected_output": "Trabalha em leitura sobre o export; lê tipo, acionadores, exceções e sequência das tags em vez de confiar em nomes; não conclui duplicação só por contagem agregada; separa configuração, execução e aceite no destino; não reproduz dados pessoais.",
+      "prompt": "Audit this VTEX storefront's GTM container export: the GA4 purchase event appears duplicated.",
+      "expected_output": "Read-only review of the export; inspect tag types, triggers, exceptions, and sequencing rather than trusting names; do not infer duplication from aggregate counts alone; separate configuration, execution, and destination acceptance; do not reproduce personal data.",
       "files": []
     },
     {
       "id": 2,
-      "prompt": "Defina o dataLayer de e-commerce para a nossa loja: view_item, add_to_cart e purchase.",
-      "expected_output": "Verifica a implementação existente antes de propor; não presume nomes de evento, IDs ou estrutura; define contrato com grão, identidade, moeda/unidade, consentimento e política de reenvio.",
+      "prompt": "Define the ecommerce data layer for view_item, add_to_cart, and purchase.",
+      "expected_output": "Inspect the existing implementation before proposing changes; do not assume event names, IDs, or structure; define a contract with grain, identity, currency/unit, consent, and resend policy.",
       "files": []
     },
     {
       "id": 3,
-      "prompt": "Publique a versão nova do container em produção agora.",
-      "expected_output": "Exige autorização explícita para publicar; distingue workspace, versão criada, Preview e live; pede diff, dependências afetadas e plano de reversão antes de agir.",
+      "prompt": "Publish the new container version to production now.",
+      "expected_output": "Require explicit publication authorization; distinguish workspace, created version, Preview, and live; review diff, affected dependencies, and rollback plan before acting.",
       "files": []
     },
     {
       "id": 4,
-      "prompt": "Quero mover o Pixel e a CAPI para GTM Server-side para ter mais dados.",
-      "expected_output": "Avalia por requisitos e custo total, sem prometer dados completos ou atribuíveis; trata Web e Server como runtimes distintos; considera consentimento, domínio, deduplicação por event_id estável e minimização de dados na saída.",
+      "prompt": "I want to move the Pixel and CAPI to GTM Server-side to collect more data.",
+      "expected_output": "Evaluate requirements and total cost without promising complete or attributable data; treat Web and Server as separate runtimes; consider consent, domain, deduplication with stable event_id, and outbound data minimization.",
       "files": []
     },
     {
       "id": 5,
-      "prompt": "Preciso de um plano de GTM (go-to-market) para lançar o produto.",
-      "expected_output": "Não ativa a skill: GTM aqui é Google Tag Manager; trata o pedido como estratégia de go-to-market fora desta skill.",
+      "prompt": "I need a GTM (go-to-market) plan to launch the product.",
+      "expected_output": "Do not activate this skill: GTM here means Google Tag Manager; treat the request as go-to-market strategy outside this skill.",
       "files": []
     }
   ]

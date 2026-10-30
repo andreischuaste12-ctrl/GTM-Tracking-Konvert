@@ -1,41 +1,40 @@
-# Container GTM Web
+# GTM Web container
 
-## Data Layer e fluxo
+## Data layer and event flow
 
-Antes de criar tags, observar o evento do navegador e documentar nome, ordem temporal, `dataLayer` e mudanças de rota. Em aplicações SPA/VTEX, não presumir que page load, navegação, DOM Ready e eventos de ecommerce ocorram uma vez ou na mesma página. Usar Preview para conferir se o evento dispara uma tag uma única vez no cenário e momento pretendidos.
+Before creating tags, observe the browser event and document its name, timing, `dataLayer`, and route changes. In SPA/VTEX applications, do not assume page load, navigation, DOM Ready, and ecommerce events happen once or on the same page. Use Preview to confirm the event fires a tag once at the intended time/scenario.
 
-Preservar dataLayer do produtor. Não criar no GTM eventos de negócio que duplicam o produtor sem definir claramente o responsável. Para `page_view`, distinguir envio automático da Google tag, tags manuais, mudanças de rota e eventos enviados pelo Server. `send_page_view: false` é uma evidência de configuração daquela tag, não prova ausência de outro emissor.
+Preserve the producer's data layer. Do not create GTM business events that duplicate the producer without clearly assigning ownership. For `page_view`, distinguish automatic Google tag sends, manual tags, route changes, and Server-originated events. `send_page_view: false` proves one tag's configuration, not that no other emitter exists.
 
-Para eventos de busca interna, conferir com e sem resultados se o evento e termo aparecem na origem. Mapear os campos reais para `view_search_results`, com quantidade igual a zero permitida quando não houver resultados. Configuração de pesquisa no GA4 não garante que o app VTEX envie o evento.
+For internal-search events, verify with and without results that event and query appear at the source. Map actual fields to `view_search_results`; zero results may be valid. GA4 search configuration does not guarantee the VTEX app emits the event.
 
-## Prévia por evento
+## Preview each event
 
-Para cada evento selecionado, revisar em sequência:
+For every selected event, inspect in order:
 
-1. `dataLayer` no momento do evento.
-2. Variáveis resolvidas no evento (não apenas sua configuração).
-3. Acionadores que dispararam e tags que executaram, inclusive exceções.
-4. Hit Web e parâmetros de e-commerce/destino.
-5. Dados correspondentes no Preview Server quando houver encaminhamento.
-6. Resposta do destino e DebugView/Event Manager quando a pergunta exigir recebimento externo.
+1. `dataLayer` at event time.
+2. Variables resolved for that event, not just their configuration.
+3. Triggers fired and tags executed, including exceptions.
+4. Web hit and ecommerce/destination parameters.
+5. Corresponding Server Preview data when forwarded.
+6. Destination response and DebugView/Event Manager when external receipt is in scope.
 
-Use primeiro ações não financeiras — page view, lista, produto, busca, carrinho e etapas do checkout. Confirme moeda, itens, ID de variante/SKU e `event_id` para eventos úteis ao downstream. Eventos em etapas anteriores não comprovam `purchase`.
+Start with non-financial actions—page view, list, product, search, cart, and checkout steps. Confirm currency, items, variant/SKU ID, and `event_id` for downstream-useful events. Earlier steps do not prove `purchase`.
 
-## Consentimento, identificadores e dados pessoais
+## Consent, identifiers, and personal data
 
-Encontre a CMP real e verifique consentimento inicial, atualização, recusa, aceitação e revogação, além das tags que executaram em cada estado. Um objeto `consent` em dataLayer não prova que o estado consumido pelas tags mudou. No GTM, confirme template/API compatível com Consent Mode e ordem correta; a documentação atual do Google orienta usar `setDefaultConsentState` e `updateConsentState` em templates GTM. No `gtag.js`, os comandos de consentimento seguem outra interface. Não substitua a API do GTM por comandos enfileirados sem validar a ordem. Não presuma nome/API da CMP nem trate Consent Mode como banner ou prova de conformidade. Confira [fontes oficiais](fontes-oficiais.md) e regras aplicáveis.
+Find the actual CMP. Verify initial consent, update, denial, grant, revocation, and which tags executed for each state. A `consent` object in the data layer does not prove tags consumed the changed state. In GTM, confirm a Consent Mode-compatible template/API and correct ordering; current Google guidance uses `setDefaultConsentState` and `updateConsentState` in GTM templates. In `gtag.js`, consent commands use a different interface. Do not replace GTM API with queued commands without validating order. Do not assume the CMP/API name or treat Consent Mode as a banner or compliance proof. Check [official references](official-references.md) and applicable policy.
 
-Mantenha dados de usuário em recurso próprio das plataformas quando aplicável, não em parâmetros de evento analítico genéricos. Revise normalização, hashing e origem apenas contra o contrato oficial vigente. Trate payload de e-mail, token e identificadores como sensíveis; não replique valores em relatórios, testes ou arquivos de saída.
+Keep user data in a platform's dedicated feature where applicable, not generic analytics event parameters. Verify normalization, hashing, and source against the current official contract. Treat email, token, and identifier payloads as sensitive; never copy values into reports, tests, or output files.
 
-## Deduplicação do Pixel e Server
+## Pixel and Server deduplication
 
-Mapeie todos os emissores do mesmo evento: pixel nativo do app/checkout, tags HTML, template Meta no Server e quaisquer integrações. Registre `event_name`, origem e identificador de evento. Só alegue deduplicação após confirmar, para o mesmo evento lógico, nomes e IDs idênticos nos canais e evidência do Event Manager. Um ID GTM único por ocorrência não é necessariamente um ID estável por pedido. Um event ID de compra tem de seguir o contrato do fornecedor e coordenar browser/server; não inventar um emissor novo para preencher lacuna.
+Map every emitter for the same event: app/checkout native pixel, HTML tags, Server Meta template, and integrations. Record `event_name`, source, and event ID. Claim deduplication only after verifying identical names and IDs across channels for the same logical event and confirming Event Manager evidence. A unique GTM ID per occurrence is not necessarily a stable order ID. A purchase event ID must follow the provider contract and coordinate browser/Server; do not invent another emitter to fill a gap.
 
-Não contar dois disparos como duas conversões contabilizadas; também não assumir que a Meta os deduplicou sem confirmação. Tipos standard/custom event, Pixel ID e parâmetros de catálogo precisam ser conferidos.
+Do not equate two firings with two counted conversions; also do not assume Meta deduplicated them without confirmation. Verify standard/custom event type, Pixel ID, and catalog parameters.
 
-O `eventID` do Pixel em tag HTML personalizada pode ser calculado tarde demais (depois da próxima mensagem do produtor) e divergir do enviado ao Server. No Preview, comparar o ID do Pixel com o número da **própria** mensagem do evento, não com o evento seguinte. Padrão de correção em [licoes-tecnicas.md](licoes-tecnicas.md).
+The Pixel `eventID` in a custom HTML tag may be computed too late (after the producer's next message) and differ from the Server ID. In Preview, compare the Pixel ID to the **same event's** message number, not the following event. See the correction pattern in [technical pitfalls](technical-pitfalls.md).
 
-## SPA e eventos repetidos
+## SPA and repeated events
 
-Em SPA (VTEX IO), page views de terceiros precisam disparar no evento de rota, não só em "All Pages". O produtor pode repetir `pageView` da mesma URL, `view_cart` do minicarrinho ou `add_payment_info` a cada troca de forma de pagamento: tratar com exceção ou chave de deduplicação testada nos dois momentos (acionador e registro).
-
+In an SPA (VTEX IO), third-party page views must fire on the route event, not only on “All Pages.” The producer may repeat `pageView` for the same URL, `view_cart` for a mini-cart, or `add_payment_info` after each payment-method change. Use an exception or deduplication key tested at both trigger and recording time.
