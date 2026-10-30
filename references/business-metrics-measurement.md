@@ -63,8 +63,9 @@ requires a reliable new-customer rule (purchase history, not just a cookie/visit
 - Channel attribution is an approximation. For investment decisions, triangulate with
 incrementality/experiments and the financial source.
 - Classify claims as **observed fact** (verifiable data), **reported statement** (what someone
-says), **interpretation**, or **hypothesis**. Align these with tracking evidence (configured →
-Preview → hit → accepted → deduplicated → reconciled).
+  says), **interpretation**, or **hypothesis**. For tracking claims, use the canonical
+  [evidence ladder](audit-evidence.md). Treat deduplication as a separate destination-level check,
+  not as an implied step between acceptance and reporting or reconciliation.
 - A small/convenience sample (few test orders) does not represent real behavior.
 
 ## 5. Select additional data based on the decision

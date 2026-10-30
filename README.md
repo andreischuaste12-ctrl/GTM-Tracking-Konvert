@@ -27,7 +27,8 @@ destination, and evidence that it behaves as designed.
 - Measurement for page views, navigation, sign-ups, subscriptions, leads, forms, content engagement,
   and other application-defined business events.
 - GA4 recommended and custom events, optional ecommerce payloads, and Measurement Protocol.
-- Google Ads conversion tracking and browser/server conversion deduplication.
+- Google Ads conversion tracking, including Conversion Linker, click identifiers, Enhanced
+  Conversions, consent, and conversion validation.
 - Meta Pixel/Conversions API event routing and browser/server deduplication.
 - Consent Mode, consent defaults, consent updates, and consent-aware tag firing.
 - Server-side GTM architecture, request clients, transformations, forwarding, and destination
