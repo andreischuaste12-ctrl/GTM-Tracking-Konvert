@@ -32,7 +32,7 @@ workflow](references/workflow-web.md).
   workflow](references/google-ads-conversions.md).
 - Meta Pixel/CAPI pairing or deduplication: [Meta workflow](references/meta-pixel-capi.md).
 - Source integration or application event producer: [source integration
-adapters](references/source-integration-adapters.md).
+adapters](references/source-platform-adapters.md).
 - JSON export audit: run [`inventory_gtm_export.py`](scripts/inventory_gtm_export.py) for a
 value-free structural summary, then use [audit evidence](references/audit-evidence.md); consult
 [contracts, dependencies, and naming](references/contracts-dependencies-naming.md) when container

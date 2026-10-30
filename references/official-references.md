@@ -170,8 +170,9 @@ checkout hooks, and the exact installed analytics integration/plugin.
 ## Link and content review
 
 This catalog is a set of official starting points, not proof that every URL is reachable or every
-listed behavior is current. A CI link check can flag reachability regressions; it cannot establish
-that a platform rule applies to a specific account, region, product version, or consent policy.
+listed behavior is current. The best-effort CI link check can report reachability regressions; it
+cannot establish that a platform rule applies to a specific account, region, product version, or
+consent policy.
 Record `checked_on`, product/version, exact feature, and source URL when a live decision is
 verified. If network access is unavailable, mark the source unverified and continue with local
 evidence without claiming a current-doc check.

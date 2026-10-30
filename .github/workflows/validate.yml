@@ -26,6 +26,9 @@ jobs:
         run: python -m unittest discover -s tests -v
 
   external-link-check:
+    # Public documentation hosts may block automated link probes; keep the report visible
+    # without allowing transient remote availability to block repository changes.
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
