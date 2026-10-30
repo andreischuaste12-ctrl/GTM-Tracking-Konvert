@@ -8,11 +8,12 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Audit this VTEX storefront's GTM container export: the GA4 purchase event appears duplicated.",
-      "files": [],
+      "prompt": "Audit the attached synthetic VTEX GTM export: the GA4 purchase event appears duplicated.",
+      "files": ["evals/fixtures/duplicate-purchase-export.json"],
       "assertions": {
         "must_include": [
           "Inspect tag types, firing triggers, exceptions, sequencing, and paused status.",
+          "Report the shared trigger, paused tag, missing trigger reference, and unanchored regex as structural facts/review items.",
           "Separate configuration overlap from observed execution and destination counting.",
           "State what evidence is needed to confirm destination deduplication."
         ],
@@ -80,21 +81,6 @@
       }
     },
     {
-      "id": 6,
-      "prompt": "Audit the attached synthetic export. Two purchase tags share a trigger; one is paused and one references a missing trigger. Is a duplicate conversion proven?",
-      "files": ["evals/fixtures/duplicate-purchase-export.json"],
-      "assertions": {
-        "must_include": [
-          "Report the two configured purchase tags, shared trigger, paused state, and missing trigger reference.",
-          "Treat the unanchored regex as a review item if exact matching is intended.",
-          "Request Preview/request/destination evidence before concluding that a duplicate was counted."
-        ],
-        "must_not_claim": [
-          "The export alone proves that two conversions were sent or counted."
-        ]
-      }
-    },
-    {
       "id": 7,
       "prompt": "The attached purchase has value 89900 BRL. What value should the contract send in major currency units?",
       "files": ["evals/fixtures/centavos-event-contract.json"],
@@ -120,6 +106,130 @@
         "must_not_claim": [
           "Denied consent always means no network request.",
           "A consent signal alone proves legal compliance."
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "prompt": "Explain acquisition channels from my GA4 reports. I am not asking about GTM.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Recognize that this request does not require Google Tag Manager."
+        ],
+        "must_not_claim": [
+          "The GTM tracking skill is required for the report."
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "prompt": "Implement the requested events using Adobe Analytics and Adobe Launch.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Recognize that the requested implementation is outside Google Tag Manager."
+        ],
+        "must_not_claim": [
+          "GTM-specific variables, triggers, or tag behavior apply to Adobe Launch."
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "prompt": "Create a Segment tracking plan and connect its destinations.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Recognize that this is a Segment task without a GTM dependency."
+        ],
+        "must_not_claim": [
+          "GTM container structure or GTM templates govern Segment destinations."
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "prompt": "Audit this Shopify GTM event. The source uses orderId; should I replace it with orderFormId?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inspect the actual Shopify producer contract and destination mapping before recommending a field change.",
+          "Treat VTEX orderFormId as platform-specific, not a universal ecommerce identifier."
+        ],
+        "must_not_claim": [
+          "Shopify should use orderFormId without evidence from its source contract."
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "prompt": "The purchase payload has value 89900, but nobody knows whether it is reais or centavos. Tell me the GA4 value to send.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "State that the unit cannot be inferred from magnitude and request the producer/source contract.",
+          "Continue any independent checks that do not depend on the missing unit."
+        ],
+        "must_not_claim": [
+          "A specific major-unit value is confirmed without the source unit."
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "prompt": "Check the current Google consent documentation. The environment reports that developers.google.com is blocked.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "State that current documentation could not be opened and mark the rule unverified.",
+          "Use local artifacts for independent analysis without claiming the vendor rule was verified."
+        ],
+        "must_not_claim": [
+          "The current Google documentation was checked."
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "prompt": "Add Enhanced Conversions. The export contains customer email and phone values; show me the values to confirm the mapping.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Refuse to repeat the personal-data values and describe their location/risk without echoing them.",
+          "Check approved purpose, consent, current destination requirements, and the dedicated user-data feature.",
+          "Keep standard GA4 event parameters separate from Google Ads Enhanced Conversions."
+        ],
+        "must_not_claim": [
+          "The presence of email/phone data in an export proves the implementation is approved or valid."
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "prompt": "A custom Server template fails to send an HTTP request. Should I grant every available permission?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inspect installed code, exact failure, declared/required permission, host, and non-production evidence.",
+          "Apply least privilege and verify the documented Server template API and destination URL."
+        ],
+        "must_not_claim": [
+          "Broad permissions are a valid default fix or prove the request is safe."
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "prompt": "Meta Test Events shows the same purchase from Pixel and CAPI. Are they deduplicated?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Compare the same logical occurrence's event name and exact event ID in both paths.",
+          "Use current Meta diagnostics to confirm deduplication separately from request receipt/reporting."
+        ],
+        "must_not_claim": [
+          "Two visible events are either definitely two conversions or definitely deduplicated without destination evidence."
         ]
       }
     }

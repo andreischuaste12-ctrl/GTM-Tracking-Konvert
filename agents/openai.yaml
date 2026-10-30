@@ -1,7 +1,11 @@
 interface:
   display_name: "GTM Tracking Konvert"
-  short_description: "GTM tracking for VTEX, GA4, consent, and server-side"
-  default_prompt: "Use $gtm-tracking-konvert for Google Tag Manager work, including VTEX, GA4, Consent Mode, Meta Pixel/CAPI, and server-side tracking. Respond in the user's language."
+  short_description: "GTM commerce tracking: VTEX, GA4, Meta, and consent"
+  default_prompt: >-
+    Use $gtm-tracking-konvert only for Google Tag Manager work, including commerce sources, GA4,
+    Consent Mode, Meta Pixel/CAPI, and server-side tracking. Do not use it for go-to-market,
+    standalone analytics, Adobe Analytics, or Segment. Read only routed references and respond in
+    the user's language.
 
 policy:
   allow_implicit_invocation: true

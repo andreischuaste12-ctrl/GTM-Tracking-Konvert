@@ -56,7 +56,8 @@
 
 ## Data flow and validation
 
-`producer → data layer/request → GTM Web → optional GTM Server → destination → reporting/reconciliation`
+`producer → data layer/request → GTM Web → optional GTM Server → destination →
+reporting/reconciliation`
 
 | Scenario | Input/consent state | Expected producer event | Expected tag/request | Expected destination result | Evidence collected |
 |---|---|---|---|---|---|

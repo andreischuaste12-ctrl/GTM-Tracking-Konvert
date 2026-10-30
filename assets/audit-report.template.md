@@ -12,7 +12,8 @@
 
 ## Executive summary
 
-State only evidence-backed conclusions. Distinguish configuration, observed execution, request sent, destination acceptance, reporting, deduplication, and reconciliation.
+State only evidence-backed conclusions. Distinguish configuration, observed execution, request sent,
+destination acceptance, reporting, deduplication, and reconciliation.
 
 ## Findings
 
@@ -46,4 +47,5 @@ List correct behavior, paused items, permissions, and dependencies that must rem
 
 ## Final state
 
-Mark each change precisely: proposed, local file changed, workspace changed, Preview observed, request sent, destination accepted, counted, reconciled, versioned, or published.
+Mark each change precisely: proposed, local file changed, workspace changed, Preview observed,
+request sent, destination accepted, counted, reconciled, versioned, or published.
