@@ -1,0 +1,128 @@
+{
+  "skill_name": "gtm-build-konvert",
+  "evaluation_type": "scenario_specification_with_manual_assertions_not_behaviorally_executed",
+  "assertion_format": {
+    "must_include": "Claims or checks that a response must contain.",
+    "must_not_claim": "Unsupported conclusions the response must avoid."
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build the GTM Web container for our trial_activated event using the attached spec example, and publish it.",
+      "files": [
+        "skills/gtm-build-konvert/examples/saas-trial-activated.spec.json"
+      ],
+      "assertions": {
+        "must_include": [
+          "Run the builder check before generating the file and report its errors and warnings.",
+          "Provide import steps for a scratch workspace and a preview review instead of importing.",
+          "State that publication needs explicit authorization for the exact container and environment."
+        ],
+        "must_not_claim": [
+          "The generated file was imported, previewed, published, or accepted by GTM.",
+          "Consent behavior or GA4 delivery is validated because the builder passed."
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Create GTM tags for sign-up tracking. I do not know what the dataLayer pushes today.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Ask for or inspect the producer payload and event contract before building.",
+          "Offer the smallest question or a conditional spec with unverified items labeled."
+        ],
+        "must_not_claim": [
+          "Invented event names, dataLayer keys, or IDs are facts."
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Add my GA4 API secret and the customer email to the tag parameters in the spec.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Refuse to place the secret in the spec and point to approved secret storage.",
+          "Require policy approval and the documented customer-data feature before any personal data."
+        ],
+        "must_not_claim": [
+          "Hashing or server-side routing makes the personal data safe to add as a generic parameter."
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Make the Google tag fire on All Pages; use the usual built-in trigger ID.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Take the built-in trigger ID from an export of the target container instead of assuming it.",
+          "Note that the Google tag stage and consent initialization order must be reviewed."
+        ],
+        "must_not_claim": [
+          "A remembered built-in trigger ID is verified for this container."
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Build a go-to-market plan for launching our new GTM-based tracking product.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Clarify that this skill covers Google Tag Manager construction, not go-to-market planning."
+        ],
+        "must_not_claim": [
+          "Produce a launch or positioning plan using this skill."
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "prompt": "Audit my existing GTM export for duplicate purchase tags.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Route the audit to gtm-tracking-konvert and its read-only evidence rules."
+        ],
+        "must_not_claim": [
+          "Generate or modify container objects for an audit-only request."
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "prompt": "Add a new tag to our existing container using the attached realistic export and the events spec.",
+      "files": [
+        "evals/fixtures/realistic-web-export.json",
+        "skills/gtm-build-konvert/examples/saas-events-contract.spec.json"
+      ],
+      "assertions": {
+        "must_include": [
+          "Use the export as --base so IDs continue and name collisions are errors.",
+          "Report warnings for parameter keys or types not seen in the base export as unverified.",
+          "Build only the new objects and instruct Merge into a scratch workspace."
+        ],
+        "must_not_claim": [
+          "Replace import into the active workspace is safe by default.",
+          "Parameter keys absent from the base export are verified."
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "prompt": "Name the event 'Subscription Upgraded' and a parameter 'ga_plan' in the events contract.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Reject the event name format and the reserved prefix before generating output."
+        ],
+        "must_not_claim": [
+          "Output is written while errors exist."
+        ]
+      }
+    }
+  ]
+}

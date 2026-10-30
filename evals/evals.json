@@ -301,6 +301,96 @@
           "An HTTP 200 response alone proves the conversion was accepted, counted, or reconciled."
         ]
       }
+    },
+    {
+      "id": 21,
+      "prompt": "After checkout the visitor lands on the payment domain and returns; sessions split and the source becomes the payment provider. What do we change?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inventory every hostname and check linker configuration and the parameter reaching the next page.",
+          "Verify the same client/session identifier before and after each hop.",
+          "Treat unwanted-referral configuration as a check after confirming where the new session starts."
+        ],
+        "must_not_claim": [
+          "Self-referrals are fixed by adding an exclusion before locating the hop.",
+          "A configured domain list proves the parameter reached the destination page."
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "prompt": "Track form submissions as qualified leads using the GTM Form Submit trigger.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Separate submitted, accepted, and qualified outcomes and prefer the application success event.",
+          "Note that the trigger fires on browser submit including failed validation or JavaScript-handled forms.",
+          "Exclude field values from event parameters."
+        ],
+        "must_not_claim": [
+          "A form-submit trigger proves a lead was accepted or qualified."
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "prompt": "GA4 enhanced measurement already tracks outbound clicks, and we added a GTM click tag for the same links. Is it duplicated?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Identify which mechanism owns each event and check configuration overlap.",
+          "Require destination or request evidence before saying events were double counted."
+        ],
+        "must_not_claim": [
+          "Configuration overlap alone proves counted duplicates in reports."
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "prompt": "GA4 reports 940 purchases yesterday and the backend has 1,000 paid orders. Reconcile and tell me what is broken.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Align grain, timezone, window, filters, identity key, and consent before comparing.",
+          "Classify the gap and keep an unexplained remainder instead of forcing totals to match."
+        ],
+        "must_not_claim": [
+          "The 60-order gap is caused by tracking implementation errors.",
+          "A single cause explains the full gap without per-class quantification."
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "prompt": "The site feels slow; remove the tags that look heavy.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Require measurement before and after on a named page and device class.",
+          "Check references, consent order, and rollback before removing or pausing tags."
+        ],
+        "must_not_claim": [
+          "Tag count alone proves the performance cause.",
+          "Removing a tag is safe because it looks unused."
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "prompt": "Add a TikTok Pixel purchase event; use the same parameters as our Meta purchase event.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Take the event name, parameters, and identifier rules from the destination's current documentation and installed template.",
+          "Design the shared event ID and verify deduplication with destination diagnostics if a server path exists.",
+          "Leave consent undeclared and report the gap if no approved policy exists."
+        ],
+        "must_not_claim": [
+          "Meta parameter names, units, or ID formats are valid for another platform without verification."
+        ]
+      }
     }
   ]
 }

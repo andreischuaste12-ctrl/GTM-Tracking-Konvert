@@ -148,6 +148,13 @@ behavior, destination acceptance, consent compliance, or reconciliation. The syn
 [`evals/`](evals/) include manual response criteria; they are not an automated model-evaluation
 harness.
 
+A second skill, [`gtm-build-konvert`](skills/gtm-build-konvert/SKILL.md), covers container
+construction: a declarative spec is validated and turned into an import-ready container JSON with
+`skills/gtm-build-konvert/scripts/build_gtm_container.py`. A contract-style `events` section expands
+into variables, triggers, and GA4 tags; `--base` extends an existing container without ID or name
+collisions. It writes a local file only; import and publication stay manual and need explicit
+authorization.
+
 Run local repository checks with `python3 scripts/check_docs.py` and `python3 -m unittest discover
 -s tests -v`.
 

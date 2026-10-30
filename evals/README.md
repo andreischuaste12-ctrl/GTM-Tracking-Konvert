@@ -6,6 +6,10 @@ them as passing evals until a reviewer or a configured evaluation harness has ru
 
 ## Manual run
 
+Generate a scoring sheet with `python3 evals/build_review_sheet.py evals/evals.json --output
+sheet.md` (use `skills/gtm-build-konvert/evals/evals.json` for the build skill). It lists every
+criterion with a pass box and the metadata fields below, and is marked not executed until filled.
+
 1. Run each prompt with the skill enabled and disabled against the same fixture/context.
 2. Score each `must_include` and `must_not_claim` criterion as pass/fail; cite the response text.
 3. Fail the scenario if any `must_not_claim` criterion is violated. Report partial credit for

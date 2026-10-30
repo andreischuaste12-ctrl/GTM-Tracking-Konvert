@@ -55,6 +55,15 @@ read template and Server guidance as needed.
 reconciliation](references/ecommerce-money-reconciliation.md).
 - Measurement plans, KPIs, or financial definitions: [business metrics and
 measurement](references/business-metrics-measurement.md).
+- Cross-domain journeys, lost campaign or click-ID attribution, referral issues, or cookie lifetime:
+  [attribution and cross-domain](references/attribution-cross-domain.md).
+- Click, form, scroll, or video triggers, Enhanced measurement overlap, or SPA route changes: [auto-events
+  and SPA navigation](references/auto-events-spa.md).
+- Comparing GA4 or BigQuery data with a backend or ad platform: [warehouse
+  reconciliation](references/warehouse-reconciliation.md).
+- Slow pages, tag load order, or container bloat: [tag performance](references/tag-performance.md).
+- Destinations without a dedicated workflow (TikTok, LinkedIn, Pinterest, Microsoft Ads, and
+  similar): [other pixels](references/third-party-pixels.md).
 - Changes, imports, publication, production tests, or UI actions: [working mode and
 release](references/working-mode-release.md).
 - Review of another model's recommendation: check every claim against current artifacts using [audit
@@ -70,6 +79,9 @@ template](assets/audit-report.template.md).
 matrix](references/task-decision-matrix.md) to select a minimal workflow.
 - Revenue reconciliation: use the [reconciliation template](assets/reconciliation.template.md) and
 [ecommerce guidance](references/ecommerce-money-reconciliation.md).
+- Building a new container or import-ready JSON from an approved contract: use the sibling skill
+  [`gtm-build-konvert`](skills/gtm-build-konvert/SKILL.md); return here for audit, contract, and
+  release review.
 - Example prompt/response patterns: [synthetic task patterns](examples/task-patterns.md).
 - Filled artifact examples: see [synthetic examples](examples/).
 
