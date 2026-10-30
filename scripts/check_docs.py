@@ -30,6 +30,38 @@ def check_markdown_links() -> list[str]:
     return errors
 
 
+DESCRIPTION = re.compile(r"(?ms)^description:\s*>-?\n((?:[ ]{2}.*\n?)+)")
+
+
+def check_skill_metadata() -> list[str]:
+    errors: list[str] = []
+    for skill_root in SKILL_ROOTS:
+        skill_path = skill_root / "SKILL.md"
+        label = skill_path.relative_to(ROOT)
+        parts = skill_path.read_text(encoding="utf-8").split("---", 2)
+        frontmatter = parts[1] if len(parts) > 1 else ""
+        name = SKILL_NAME.search(frontmatter)
+        if skill_root != ROOT and (not name or name.group(1) != skill_root.name):
+            errors.append(f"{label}: name must equal its directory name")
+        description = DESCRIPTION.search(frontmatter)
+        text = " ".join(line.strip() for line in description.group(1).splitlines()) if description else ""
+        if not text:
+            errors.append(f"{label}: description is missing")
+        elif len(text) > 1024:
+            errors.append(f"{label}: description is {len(text)} characters (limit 1024)")
+        references = skill_root / "references"
+        body = parts[2] if len(parts) > 2 else ""
+        if references.is_dir():
+            for reference in sorted(references.glob("*.md")):
+                if reference.name not in body and reference.name not in "".join(
+                    other.read_text(encoding="utf-8")
+                    for other in references.glob("*.md")
+                    if other != reference
+                ):
+                    errors.append(f"{reference.relative_to(ROOT)}: not linked from SKILL.md or another reference")
+    return errors
+
+
 def check_json_files() -> list[str]:
     errors: list[str] = []
     for path in sorted(ROOT.rglob("*.json")):
@@ -42,21 +74,29 @@ def check_json_files() -> list[str]:
     return errors
 
 
+SKILL_ROOTS = (ROOT, ROOT / "skills/gtm-build-konvert")
+
+
 def check_evaluations() -> list[str]:
+    return [error for skill_root in SKILL_ROOTS for error in check_skill_evaluations(skill_root)]
+
+
+def check_skill_evaluations(skill_root: Path) -> list[str]:
     errors: list[str] = []
-    eval_path = ROOT / "evals/evals.json"
-    skill_path = ROOT / "SKILL.md"
+    eval_path = skill_root / "evals/evals.json"
+    skill_path = skill_root / "SKILL.md"
+    eval_label = eval_path.relative_to(ROOT)
     data = json.loads(eval_path.read_text(encoding="utf-8"))
     frontmatter = skill_path.read_text(encoding="utf-8").split("---", 2)
     skill_match = SKILL_NAME.search(frontmatter[1] if len(frontmatter) > 1 else "")
     skill_name = skill_match.group(1) if skill_match else None
 
     if not skill_name or data.get("skill_name") != skill_name:
-        errors.append("evals/evals.json: skill_name does not match SKILL.md frontmatter")
+        errors.append(f"{eval_label}: skill_name does not match SKILL.md frontmatter")
 
     ids: set[int] = set()
     for index, item in enumerate(data.get("evals", [])):
-        label = f"evals/evals.json: eval index {index}"
+        label = f"{eval_label}: eval index {index}"
         eval_id = item.get("id")
         if not isinstance(eval_id, int) or eval_id in ids:
             errors.append(f"{label} has a missing or duplicate integer id")
@@ -74,12 +114,12 @@ def check_evaluations() -> list[str]:
             if not isinstance(attached, str) or not (ROOT / attached).is_file():
                 errors.append(f"{label} references a missing fixture")
     if data.get("evaluation_type") != "scenario_specification_with_manual_assertions_not_behaviorally_executed":
-        errors.append("evals/evals.json: evaluation_type must disclose manual, unexecuted behavior criteria")
+        errors.append(f"{eval_label}: evaluation_type must disclose manual, unexecuted behavior criteria")
     return errors
 
 
 def main() -> int:
-    errors = check_markdown_links() + check_json_files() + check_evaluations()
+    errors = check_markdown_links() + check_json_files() + check_skill_metadata() + check_evaluations()
     if errors:
         print("Documentation validation failed:")
         for error in errors:

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -19,8 +20,41 @@ ENTITY_KEYS = (
     "customTemplate",
     "builtInVariable",
 )
+ID_KEYS = {
+    "tag": "tagId",
+    "trigger": "triggerId",
+    "variable": "variableId",
+    "folder": "folderId",
+    "customTemplate": "templateId",
+}
 TRIGGER_REFERENCE_KEYS = {"firingTriggerId", "blockingTriggerId", "triggerId", "triggerIds"}
 FILTER_KEYS = {"customEventFilter", "filter"}
+# Heuristic: GTM built-in triggers (for example All Pages) are referenced by IDs in the
+# 2147479xxx range and do not appear in the exported trigger list.
+BUILTIN_TRIGGER_ID_FLOOR = 2147479000
+ALWAYS_RESOLVED_REFERENCES = {"_event"}
+REFERENCE = re.compile(r"\{\{([^{}]+)\}\}")
+SENSITIVE_NAME = re.compile(r"e[-_]?mail|phone|telefone|cpf|passw|birth", re.IGNORECASE)
+SECRET_NAME = re.compile(r"secret|token|passw|api[-_]?key", re.IGNORECASE)
+REVIEW_KEYS = (
+    "paused_tags",
+    "duplicate_ids",
+    "duplicate_names",
+    "missing_trigger_references",
+    "builtin_trigger_references",
+    "orphan_triggers",
+    "tags_without_firing_trigger",
+    "tags_without_consent_settings",
+    "custom_html_tags",
+    "sensitive_parameter_names",
+    "literal_secret_like_parameters",
+    "unreferenced_variables",
+    "unresolved_variable_references",
+    "unanchored_regex_filters",
+    "sequencing_references",
+    "unresolved_sequencing_references",
+    "sequencing_cycle_groups",
+)
 
 
 def _entity_list(version: dict[str, Any], key: str) -> list[dict[str, Any]]:
@@ -115,8 +149,9 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
 
     duplicate_ids = 0
     duplicate_names = 0
-    for items in entities.values():
-        ids = [str(item["tagId"] if "tagId" in item else item["triggerId"] if "triggerId" in item else item["variableId"] if "variableId" in item else item["folderId"] if "folderId" in item else item["templateId"] if "templateId" in item else item["builtInVariableId"] if "builtInVariableId" in item else "") for item in items]
+    for key, items in entities.items():
+        id_key = ID_KEYS.get(key)
+        ids = [str(item[id_key]) for item in items if id_key and id_key in item]
         names = [item.get("name") for item in items if isinstance(item.get("name"), str)]
         duplicate_ids += sum(count - 1 for count in Counter(item for item in ids if item).values() if count > 1)
         duplicate_names += sum(count - 1 for count in Counter(names).values() if count > 1)
@@ -139,7 +174,11 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
         for node in _walk(tag):
             for key in ("firingTriggerId", "blockingTriggerId"):
                 referenced_from_tags.update(_values(node.get(key)))
-    missing_trigger_references = len(referenced_from_tags - trigger_ids)
+    unlisted_references = referenced_from_tags - trigger_ids
+    builtin_trigger_references = {
+        ref for ref in unlisted_references if ref.isdigit() and int(ref) >= BUILTIN_TRIGGER_ID_FLOOR
+    }
+    missing_trigger_references = len(unlisted_references - builtin_trigger_references)
     orphan_triggers = len(trigger_ids - referenced_ids)
 
     unanchored_regex_filters = 0
@@ -179,6 +218,33 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
             sequencing_graph[index].update(targets)
     sequencing_cycle_groups = _cycle_group_count(sequencing_graph)
 
+    tags = entities["tag"]
+    variable_names = {item["name"] for item in entities["variable"] if isinstance(item.get("name"), str)}
+    resolvable = (
+        variable_names
+        | {item["name"] for item in entities["builtInVariable"] if isinstance(item.get("name"), str)}
+        | ALWAYS_RESOLVED_REFERENCES
+    )
+    used_references: set[str] = set()
+    for collection in ("tag", "trigger", "variable"):
+        for item in entities[collection]:
+            for node in _walk(item):
+                for child in node.values():
+                    if isinstance(child, str):
+                        used_references.update(REFERENCE.findall(child))
+
+    sensitive_parameter_names = 0
+    literal_secret_like_parameters = 0
+    for item in tags + entities["variable"]:
+        for node in _walk(item.get("parameter", [])):
+            key_name, value = node.get("key"), node.get("value")
+            if not isinstance(key_name, str) or not isinstance(value, str):
+                continue
+            if SENSITIVE_NAME.search(key_name) or SENSITIVE_NAME.search(value):
+                sensitive_parameter_names += 1
+            if SECRET_NAME.search(key_name) and value and not REFERENCE.fullmatch(value):
+                literal_secret_like_parameters += 1
+
     return {
         "sha256": hashlib.sha256(raw_bytes).hexdigest(),
         "entity_counts": counts,
@@ -186,7 +252,20 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
         "duplicate_ids": duplicate_ids,
         "duplicate_names": duplicate_names,
         "missing_trigger_references": missing_trigger_references,
+        "builtin_trigger_references": len(builtin_trigger_references),
         "orphan_triggers": orphan_triggers,
+        "tags_without_firing_trigger": sum(
+            not tag.get("firingTriggerId") and tag.get("paused") is not True for tag in tags
+        ),
+        "tags_without_consent_settings": sum(
+            (tag.get("consentSettings") or {}).get("consentStatus", "NOT_SET") == "NOT_SET"
+            for tag in tags
+        ),
+        "custom_html_tags": sum(tag.get("type") == "html" for tag in tags),
+        "sensitive_parameter_names": sensitive_parameter_names,
+        "literal_secret_like_parameters": literal_secret_like_parameters,
+        "unreferenced_variables": len(variable_names - used_references),
+        "unresolved_variable_references": len(used_references - resolvable),
         "unanchored_regex_filters": unanchored_regex_filters,
         "sequencing_references": sequencing_references,
         "unresolved_sequencing_references": unresolved_sequencing_references,
@@ -196,6 +275,8 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
             "Findings are counts only. Object names, IDs, parameter values, and payloads are not printed.",
             "An unanchored regex is a review prompt, not proof of a defect; anchoring is required only when exact matching is intended.",
             "Sequence references resolve by exact tag name; duplicate names can make a reported cycle ambiguous and need manual review.",
+            "Built-in trigger references are recognized by a numeric-ID heuristic (2147479xxx) and are reported separately, not as missing.",
+            "Consent, sensitive-name, secret-like, and variable-usage counts are review prompts: they read configuration only and do not prove runtime behavior or policy compliance.",
         ],
     }
 
@@ -210,7 +291,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("export", type=Path, help="Path to a GTM container JSON export")
     parser.add_argument("--json", action="store_true", help="Print the summary as JSON")
+    parser.add_argument(
+        "--fail-on",
+        default="",
+        help="Comma-separated review count names; exit 1 if any is greater than zero",
+    )
     args = parser.parse_args()
+
+    fail_keys = [key for key in args.fail_on.split(",") if key]
+    unknown = [key for key in fail_keys if key not in REVIEW_KEYS]
+    if unknown:
+        print(f"Unknown --fail-on count: {', '.join(unknown)}", file=sys.stderr)
+        return 2
 
     try:
         raw = args.export.read_bytes()
@@ -229,9 +321,10 @@ def main() -> int:
         print(message, file=sys.stderr)
         return 2
 
+    failed = [key for key in fail_keys if result[key] > 0]
     if args.json:
         print(json.dumps(result, indent=2, sort_keys=True))
-        return 0
+        return 1 if failed else 0
 
     print("GTM export structural inventory (read-only)")
     print(f"SHA-256: {result['sha256']}")
@@ -239,21 +332,13 @@ def main() -> int:
     for key, count in result["entity_counts"].items():
         print(f"  {key}: {count}")
     print("Review counts:")
-    for key in (
-        "paused_tags",
-        "duplicate_ids",
-        "duplicate_names",
-        "missing_trigger_references",
-        "orphan_triggers",
-        "unanchored_regex_filters",
-        "sequencing_references",
-        "unresolved_sequencing_references",
-        "sequencing_cycle_groups",
-    ):
+    for key in REVIEW_KEYS:
         print(f"  {key}: {result[key]}")
     for limitation in result["limitations"]:
         print(f"Note: {limitation}")
-    return 0
+    if failed:
+        print(f"Failing on: {', '.join(failed)}", file=sys.stderr)
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

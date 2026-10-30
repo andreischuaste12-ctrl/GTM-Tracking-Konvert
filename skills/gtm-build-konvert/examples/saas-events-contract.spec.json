@@ -1,0 +1,45 @@
+{
+  "container": {
+    "name": "Synthetic SaaS Web container (events contract)",
+    "publicId": "GTM-XXXXXXX",
+    "usageContext": ["WEB"]
+  },
+  "naming": {
+    "variable": ["DLV | ", "Constant | "],
+    "trigger": ["Event | "]
+  },
+  "ga4": {
+    "measurementIdVariable": "Constant | GA4 | Measurement ID",
+    "folder": "GA4",
+    "variableFolder": "Variables"
+  },
+  "folders": ["GA4", "Variables"],
+  "variables": [
+    {
+      "name": "Constant | GA4 | Measurement ID",
+      "type": "c",
+      "params": {"value": "G-XXXXXXXXXX"},
+      "folder": "Variables"
+    }
+  ],
+  "events": [
+    {
+      "name": "subscription_upgraded",
+      "domain": "Account",
+      "parameters": [
+        {"name": "event_id", "variableName": "DLV | Event | event_id"},
+        {"name": "plan_category"}
+      ],
+      "consent": {"status": "NEEDED", "types": ["analytics_storage"]}
+    },
+    {
+      "name": "lead_accepted",
+      "domain": "Lead",
+      "parameters": [
+        {"name": "event_id", "variableName": "DLV | Event | event_id"},
+        {"name": "lead_source", "path": "lead.source"}
+      ],
+      "consent": {"status": "NEEDED", "types": ["analytics_storage"]}
+    }
+  ]
+}

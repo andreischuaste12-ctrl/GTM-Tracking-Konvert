@@ -1,0 +1,94 @@
+{
+  "exportFormatVersion": 2,
+  "containerVersion": {
+    "container": {
+      "publicId": "GTM-SYNTHETIC",
+      "name": "Synthetic realistic-shape Web container",
+      "usageContext": ["WEB"]
+    },
+    "folder": [
+      {"folderId": "1", "name": "GA4"}
+    ],
+    "builtInVariable": [
+      {"type": "PAGE_URL", "name": "Page URL"},
+      {"type": "EVENT", "name": "Event"}
+    ],
+    "variable": [
+      {
+        "variableId": "1",
+        "name": "Constant | GA4 | Measurement ID",
+        "type": "c",
+        "parameter": [{"type": "TEMPLATE", "key": "value", "value": "G-XXXXXXXXXX"}]
+      },
+      {
+        "variableId": "2",
+        "name": "DLV | Event | event_id",
+        "type": "v",
+        "parameter": [
+          {"type": "INTEGER", "key": "dataLayerVersion", "value": "2"},
+          {"type": "TEMPLATE", "key": "name", "value": "event_id"}
+        ]
+      },
+      {
+        "variableId": "3",
+        "name": "DLV | Account | user_email",
+        "type": "v",
+        "parameter": [
+          {"type": "INTEGER", "key": "dataLayerVersion", "value": "2"},
+          {"type": "TEMPLATE", "key": "name", "value": "user.email"}
+        ]
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "10",
+        "name": "Event | Account | trial_activated",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {"type": "TEMPLATE", "key": "arg0", "value": "{{_event}}"},
+              {"type": "TEMPLATE", "key": "arg1", "value": "trial_activated"}
+            ]
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "tagId": "1",
+        "name": "Google tag",
+        "type": "googtag",
+        "parameter": [{"type": "TEMPLATE", "key": "tagId", "value": "{{Constant | GA4 | Measurement ID}}"}],
+        "firingTriggerId": ["2147479572"],
+        "consentSettings": {"consentStatus": "NOT_SET"}
+      },
+      {
+        "tagId": "2",
+        "name": "GA4 | Event | trial_activated",
+        "type": "gaawe",
+        "parameter": [
+          {"type": "TEMPLATE", "key": "eventName", "value": "trial_activated"},
+          {"type": "TEMPLATE", "key": "event_id", "value": "{{DLV | Event | event_id}}"},
+          {"type": "TEMPLATE", "key": "plan", "value": "{{DLV | Account | missing_variable}}"}
+        ],
+        "firingTriggerId": ["10"],
+        "consentSettings": {
+          "consentStatus": "NEEDED",
+          "consentType": {"type": "LIST", "list": [{"type": "TEMPLATE", "value": "analytics_storage"}]}
+        }
+      },
+      {
+        "tagId": "3",
+        "name": "Legacy pixel",
+        "type": "html",
+        "parameter": [
+          {"type": "TEMPLATE", "key": "html", "value": "<script>/* synthetic */</script>"},
+          {"type": "TEMPLATE", "key": "api_token", "value": "synthetic-literal-value"}
+        ],
+        "firingTriggerId": []
+      }
+    ]
+  }
+}

@@ -23,7 +23,15 @@ Review counts:
   duplicate_ids: 0
   duplicate_names: 0
   missing_trigger_references: 1
+  builtin_trigger_references: 0
   orphan_triggers: 0
+  tags_without_firing_trigger: 0
+  tags_without_consent_settings: 2
+  custom_html_tags: 0
+  sensitive_parameter_names: 0
+  literal_secret_like_parameters: 0
+  unreferenced_variables: 0
+  unresolved_variable_references: 0
   unanchored_regex_filters: 1
   sequencing_references: 0
   unresolved_sequencing_references: 0
@@ -32,4 +40,6 @@ Review counts:
 
 This is structural triage. It does not validate runtime behavior, consent, destination acceptance,
 conversion counting, or reconciliation. An unanchored regex is a review prompt, not automatically a
-defect.
+defect. Built-in trigger IDs (such as All Pages) are counted separately by an ID-range heuristic
+instead of as missing references. In CI, `--fail-on <count>[,<count>]` returns exit code 1 when a
+selected count is greater than zero.

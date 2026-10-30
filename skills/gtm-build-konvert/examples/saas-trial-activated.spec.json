@@ -1,0 +1,66 @@
+{
+  "container": {
+    "name": "Synthetic SaaS Web container",
+    "publicId": "GTM-XXXXXXX",
+    "usageContext": ["WEB"]
+  },
+  "naming": {
+    "variable": ["DLV | ", "Constant | ", "JS | ", "Cookie | ", "Lookup | "],
+    "trigger": ["Event | ", "Exception | "]
+  },
+  "builtinTriggerIds": {},
+  "folders": ["GA4", "Variables"],
+  "builtInVariables": [
+    {"type": "PAGE_URL", "name": "Page URL"},
+    {"type": "EVENT", "name": "Event"}
+  ],
+  "variables": [
+    {
+      "name": "Constant | GA4 | Measurement ID",
+      "type": "c",
+      "params": {"value": "G-XXXXXXXXXX"},
+      "folder": "Variables"
+    },
+    {
+      "name": "DLV | Event | event_id",
+      "type": "v",
+      "params": {"name": "event_id", "dataLayerVersion": 2, "setDefaultValue": false},
+      "folder": "Variables"
+    },
+    {
+      "name": "DLV | Account | plan_category",
+      "type": "v",
+      "params": {"name": "plan_category", "dataLayerVersion": 2, "setDefaultValue": false},
+      "folder": "Variables"
+    }
+  ],
+  "triggers": [
+    {
+      "name": "Event | Account | trial_activated",
+      "type": "CUSTOM_EVENT",
+      "eventName": "trial_activated"
+    }
+  ],
+  "tags": [
+    {
+      "name": "GA4 | Event | trial_activated",
+      "type": "gaawe",
+      "folder": "GA4",
+      "params": {
+        "eventName": "trial_activated",
+        "measurementIdOverride": "{{Constant | GA4 | Measurement ID}}",
+        "eventSettingsTable": {
+          "table": {
+            "columns": ["parameter", "parameterValue"],
+            "rows": [
+              ["event_id", "{{DLV | Event | event_id}}"],
+              ["plan_category", "{{DLV | Account | plan_category}}"]
+            ]
+          }
+        }
+      },
+      "firingTriggers": ["Event | Account | trial_activated"],
+      "consent": {"status": "NEEDED", "types": ["analytics_storage"]}
+    }
+  ]
+}

@@ -57,6 +57,61 @@ class InventoryExportTests(unittest.TestCase):
         self.assertNotIn("Synthetic purchase event", completed.stdout)
         self.assertNotIn("purchase", completed.stdout)
 
+    def test_realistic_fixture_golden_review_counts(self):
+        path = ROOT / "evals/fixtures/realistic-web-export.json"
+        raw = path.read_bytes()
+        result = inventory(json.loads(raw), raw)
+        expected = {
+            "missing_trigger_references": 0,
+            "builtin_trigger_references": 1,
+            "orphan_triggers": 0,
+            "tags_without_firing_trigger": 1,
+            "tags_without_consent_settings": 2,
+            "custom_html_tags": 1,
+            "sensitive_parameter_names": 1,
+            "literal_secret_like_parameters": 1,
+            "unreferenced_variables": 1,
+            "unresolved_variable_references": 1,
+            "duplicate_ids": 0,
+            "unanchored_regex_filters": 0,
+        }
+        for key, value in expected.items():
+            self.assertEqual(result[key], value, key)
+
+    def test_builtin_trigger_ids_are_not_reported_as_missing(self):
+        document = {
+            "containerVersion": {
+                "tag": [{"tagId": "1", "name": "A", "firingTriggerId": ["2147479553", "99"]}]
+            }
+        }
+        result = inventory(document, b"{}")
+        self.assertEqual(result["builtin_trigger_references"], 1)
+        self.assertEqual(result["missing_trigger_references"], 1)
+
+    def test_paused_tag_without_trigger_is_not_flagged(self):
+        document = {"containerVersion": {"tag": [{"tagId": "1", "name": "A", "paused": True}]}}
+        self.assertEqual(inventory(document, b"{}")["tags_without_firing_trigger"], 0)
+
+    def test_fail_on_sets_exit_code_and_rejects_unknown_counts(self):
+        script = str(ROOT / "scripts/inventory_gtm_export.py")
+        fixture = str(ROOT / "evals/fixtures/realistic-web-export.json")
+        failing = subprocess.run(
+            [sys.executable, script, fixture, "--fail-on", "custom_html_tags"],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(failing.returncode, 1)
+        passing = subprocess.run(
+            [sys.executable, script, fixture, "--fail-on", "missing_trigger_references"],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(passing.returncode, 0)
+        unknown = subprocess.run(
+            [sys.executable, script, fixture, "--fail-on", "nope"], capture_output=True, text=True
+        )
+        self.assertEqual(unknown.returncode, 2)
+
     def test_non_object_root_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "root must be an object"):
             inventory([], b"[]")
