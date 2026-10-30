@@ -1,0 +1,36 @@
+{
+  "skill_name": "gtm-organizador-konvert",
+  "evaluation_type": "scenario_specification_not_behaviorally_executed",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Audite este export do container GTM da loja VTEX: o purchase do GA4 parece duplicado.",
+      "expected_output": "Trabalha em leitura sobre o export; lê tipo, acionadores, exceções e sequência das tags em vez de confiar em nomes; não conclui duplicação só por contagem agregada; separa configuração, execução e aceite no destino; não reproduz dados pessoais.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Defina o dataLayer de e-commerce para a nossa loja: view_item, add_to_cart e purchase.",
+      "expected_output": "Verifica a implementação existente antes de propor; não presume nomes de evento, IDs ou estrutura; define contrato com grão, identidade, moeda/unidade, consentimento e política de reenvio.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Publique a versão nova do container em produção agora.",
+      "expected_output": "Exige autorização explícita para publicar; distingue workspace, versão criada, Preview e live; pede diff, dependências afetadas e plano de reversão antes de agir.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Quero mover o Pixel e a CAPI para GTM Server-side para ter mais dados.",
+      "expected_output": "Avalia por requisitos e custo total, sem prometer dados completos ou atribuíveis; trata Web e Server como runtimes distintos; considera consentimento, domínio, deduplicação por event_id estável e minimização de dados na saída.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Preciso de um plano de GTM (go-to-market) para lançar o produto.",
+      "expected_output": "Não ativa a skill: GTM aqui é Google Tag Manager; trata o pedido como estratégia de go-to-market fora desta skill.",
+      "files": []
+    }
+  ]
+}

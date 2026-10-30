@@ -1,0 +1,7 @@
+interface:
+  display_name: "GTM Tracking Konvert"
+  short_description: "Implementa e audita tracking no GTM"
+  default_prompt: "Use $gtm-organizador-konvert para implementar ou auditar tracking GTM com contratos de eventos e validação por evidência."
+
+policy:
+  allow_implicit_invocation: true
