@@ -9,7 +9,9 @@
     {
       "id": 1,
       "prompt": "Audit the attached synthetic VTEX GTM export: the GA4 purchase event appears duplicated.",
-      "files": ["evals/fixtures/duplicate-purchase-export.json"],
+      "files": [
+        "evals/fixtures/duplicate-purchase-export.json"
+      ],
       "assertions": {
         "must_include": [
           "Inspect tag types, firing triggers, exceptions, sequencing, and paused status.",
@@ -81,9 +83,11 @@
       }
     },
     {
-      "id": 7,
+      "id": 6,
       "prompt": "The attached purchase has value 89900 BRL. What value should the contract send in major currency units?",
-      "files": ["evals/fixtures/centavos-event-contract.json"],
+      "files": [
+        "evals/fixtures/centavos-event-contract.json"
+      ],
       "assertions": {
         "must_include": [
           "Use the stated minor-unit contract and derive 899.00 BRL.",
@@ -95,9 +99,11 @@
       }
     },
     {
-      "id": 8,
+      "id": 7,
       "prompt": "Review the attached consent-denied scenario. Should every analytics and ads request be absent?",
-      "files": ["evals/fixtures/consent-denied-case.json"],
+      "files": [
+        "evals/fixtures/consent-denied-case.json"
+      ],
       "assertions": {
         "must_include": [
           "Inspect the approved policy, actual consent configuration, and Consent Mode behavior.",
@@ -110,7 +116,7 @@
       }
     },
     {
-      "id": 9,
+      "id": 8,
       "prompt": "Explain acquisition channels from my GA4 reports. I am not asking about GTM.",
       "files": [],
       "assertions": {
@@ -123,7 +129,7 @@
       }
     },
     {
-      "id": 10,
+      "id": 9,
       "prompt": "Implement the requested events using Adobe Analytics and Adobe Launch.",
       "files": [],
       "assertions": {
@@ -136,7 +142,7 @@
       }
     },
     {
-      "id": 11,
+      "id": 10,
       "prompt": "Create a Segment tracking plan and connect its destinations.",
       "files": [],
       "assertions": {
@@ -149,7 +155,7 @@
       }
     },
     {
-      "id": 12,
+      "id": 11,
       "prompt": "Audit this Shopify GTM event. The source uses orderId; should I replace it with orderFormId?",
       "files": [],
       "assertions": {
@@ -163,7 +169,7 @@
       }
     },
     {
-      "id": 13,
+      "id": 12,
       "prompt": "The purchase payload has value 89900, but nobody knows whether it is reais or centavos. Tell me the GA4 value to send.",
       "files": [],
       "assertions": {
@@ -177,7 +183,7 @@
       }
     },
     {
-      "id": 14,
+      "id": 13,
       "prompt": "Check the current Google consent documentation. The environment reports that developers.google.com is blocked.",
       "files": [],
       "assertions": {
@@ -191,7 +197,7 @@
       }
     },
     {
-      "id": 15,
+      "id": 14,
       "prompt": "Add Enhanced Conversions. The export contains customer email and phone values; show me the values to confirm the mapping.",
       "files": [],
       "assertions": {
@@ -206,7 +212,7 @@
       }
     },
     {
-      "id": 16,
+      "id": 15,
       "prompt": "A custom Server template fails to send an HTTP request. Should I grant every available permission?",
       "files": [],
       "assertions": {
@@ -220,7 +226,7 @@
       }
     },
     {
-      "id": 17,
+      "id": 16,
       "prompt": "Meta Test Events shows the same purchase from Pixel and CAPI. Are they deduplicated?",
       "files": [],
       "assertions": {
