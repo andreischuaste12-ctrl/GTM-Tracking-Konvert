@@ -28,6 +28,26 @@ For single-page applications, define route ownership and whether page views are 
 Prevent the Google tag, a history trigger, application code, and a Server path from sending
 overlapping views.
 
+## Measurement Protocol
+
+Use Measurement Protocol only when a server-originated or offline measurement requirement justifies
+that collection path. It supplements a defined measurement design; it does not automatically replace
+the browser event or recover every blocked interaction.
+
+- Define the source of truth, event occurrence time, event identity, relevant session/user context,
+  consent decision, retry policy, and allowed event fields before sending.
+- Keep API secrets out of browser code, source control, logs, and examples. Apply the current
+  endpoint-specific requirements from the official documentation.
+- Validate development payloads with Google's validation facility, then inspect the intended
+  destination stream and processing/reporting separately. A validation response or HTTP success is
+  not proof that an event was processed, counted, or reconciled.
+- Prevent browser and server paths from reporting the same logical event unless the measurement
+  design explicitly accounts for duplicate delivery and uses a currently supported identity rule.
+
+Do not infer session stitching, event deduplication, attribution, or consent behavior from an event
+name. Verify each requirement in current official documentation and with evidence from the chosen
+implementation.
+
 ## Validation
 
 1. Inspect the producer event and data-layer message.

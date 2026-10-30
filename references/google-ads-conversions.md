@@ -25,6 +25,24 @@ normalization, hashing/transport responsibilities, retention, and redaction from
 documentation and the responsible policy owner. Never copy submitted email/phone values into GTM
 examples, logs, reports, or this repository.
 
+## Conversion Linker and click identifiers
+
+- Check whether auto-tagging is enabled and whether the landing URL carries the expected click
+  identifier for the account and traffic type. Do not assume every click uses `gclid`; current
+  Google Ads flows can use other identifiers.
+- Use the Google Tag Manager Conversion Linker guidance for the selected site and consent setup.
+  Verify tag scope, firing order, domain/cookie behavior, redirects, and cross-domain journeys where
+  relevant; do not copy cookie settings from another site.
+- Test landing, navigation, and conversion paths with consent states required by the approved
+  policy. Confirm what identifier state survives to the conversion tag without exposing click IDs
+  in logs or unrelated destinations.
+- A stored click identifier does not prove a conversion fired, was accepted, or was attributed.
+  Keep linker configuration, conversion request evidence, and Ads reporting as separate checks.
+
+The [official source catalog](official-references.md) links to Google's current Conversion Linker
+and auto-tagging documentation. Confirm the applicable identifier and consent behavior there before
+production changes.
+
 ## Validate and reconcile
 
 - Inspect the actual conversion tag/action ID, trigger, exception, consent behavior, value/currency,

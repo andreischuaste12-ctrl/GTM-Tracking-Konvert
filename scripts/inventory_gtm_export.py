@@ -48,6 +48,60 @@ def _values(value: Any) -> list[str]:
     return []
 
 
+def _sequence_references(tag: dict[str, Any]) -> list[str]:
+    references: list[str] = []
+    for key in ("setupTag", "teardownTag"):
+        value = tag.get(key)
+        entries = value if isinstance(value, list) else [value]
+        for entry in entries:
+            if isinstance(entry, dict) and isinstance(entry.get("tagName"), str):
+                references.append(entry["tagName"])
+    return references
+
+
+def _cycle_group_count(graph: dict[int, set[int]]) -> int:
+    visited: set[int] = set()
+    finish_order: list[int] = []
+    for start in graph:
+        if start in visited:
+            continue
+        stack = [(start, False)]
+        while stack:
+            node, expanded = stack.pop()
+            if expanded:
+                finish_order.append(node)
+                continue
+            if node in visited:
+                continue
+            visited.add(node)
+            stack.append((node, True))
+            stack.extend((neighbor, False) for neighbor in graph[node] if neighbor not in visited)
+
+    reverse_graph = {node: set() for node in graph}
+    for node, neighbors in graph.items():
+        for neighbor in neighbors:
+            reverse_graph[neighbor].add(node)
+
+    visited.clear()
+    cycle_groups = 0
+    for start in reversed(finish_order):
+        if start in visited:
+            continue
+        component: list[int] = []
+        stack = [start]
+        visited.add(start)
+        while stack:
+            node = stack.pop()
+            component.append(node)
+            for neighbor in reverse_graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    stack.append(neighbor)
+        if len(component) > 1 or start in graph[start]:
+            cycle_groups += 1
+    return cycle_groups
+
+
 def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
     if not isinstance(document, dict):
         raise ValueError("The JSON root must be an object.")
@@ -107,6 +161,24 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
                     if isinstance(pattern, str) and pattern and not (pattern.startswith("^") and pattern.endswith("$")):
                         unanchored_regex_filters += 1
 
+    tag_indices_by_name: dict[str, list[int]] = {}
+    for index, tag in enumerate(entities["tag"]):
+        name = tag.get("name")
+        if isinstance(name, str):
+            tag_indices_by_name.setdefault(name, []).append(index)
+
+    sequencing_graph = {index: set() for index in range(len(entities["tag"]))}
+    sequencing_references = 0
+    unresolved_sequencing_references = 0
+    for index, tag in enumerate(entities["tag"]):
+        for name in _sequence_references(tag):
+            sequencing_references += 1
+            targets = tag_indices_by_name.get(name, [])
+            if not targets:
+                unresolved_sequencing_references += 1
+            sequencing_graph[index].update(targets)
+    sequencing_cycle_groups = _cycle_group_count(sequencing_graph)
+
     return {
         "sha256": hashlib.sha256(raw_bytes).hexdigest(),
         "entity_counts": counts,
@@ -116,10 +188,14 @@ def inventory(document: Any, raw_bytes: bytes) -> dict[str, Any]:
         "missing_trigger_references": missing_trigger_references,
         "orphan_triggers": orphan_triggers,
         "unanchored_regex_filters": unanchored_regex_filters,
+        "sequencing_references": sequencing_references,
+        "unresolved_sequencing_references": unresolved_sequencing_references,
+        "sequencing_cycle_groups": sequencing_cycle_groups,
         "limitations": [
             "Structural triage only; it does not evaluate runtime behavior, consent, destination acceptance, counting, or reconciliation.",
             "Findings are counts only. Object names, IDs, parameter values, and payloads are not printed.",
             "An unanchored regex is a review prompt, not proof of a defect; anchoring is required only when exact matching is intended.",
+            "Sequence references resolve by exact tag name; duplicate names can make a reported cycle ambiguous and need manual review.",
         ],
     }
 
@@ -170,6 +246,9 @@ def main() -> int:
         "missing_trigger_references",
         "orphan_triggers",
         "unanchored_regex_filters",
+        "sequencing_references",
+        "unresolved_sequencing_references",
+        "sequencing_cycle_groups",
     ):
         print(f"  {key}: {result[key]}")
     for limitation in result["limitations"]:

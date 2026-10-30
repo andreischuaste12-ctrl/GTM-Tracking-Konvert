@@ -11,8 +11,9 @@ optional specialized topics, never defaults; use the actual source and destinati
 each implementation.
 
 This repository packages the project's operating guide, a routed skill, focused references, reusable
-templates, synthetic evaluation fixtures, and a read-only GTM export inventory tool. It is not an
-application, a published GTM container, or a service that runs tracking code.
+templates, synthetic evaluation fixtures, example audit/inventory outputs, and a read-only GTM export
+inventory tool. It is not an application, a published GTM container, or a service that runs tracking
+code.
 
 ## Mission
 
@@ -34,7 +35,8 @@ controls.
 - Tag templates, Tag Manager API workflows, configuration audits, and troubleshooting.
 - Implementation specifications, QA plans, release notes, rollback steps, and monitoring
 requirements.
-- Structural inventory of GTM exports with a SHA-256 digest, counts, and relationship warnings.
+- Structural inventory of GTM exports with a SHA-256 digest, entity/reference counts, regex review
+  prompts, and tag-sequencing cycle warnings.
 
 ## What this project does not cover
 
@@ -50,6 +52,9 @@ any other example.
 - Tracking projects that do not use Google Tag Manager.
 
 ## Required implementation workflow
+
+For the agent's canonical task sequence, see [Work sequence in SKILL.md](SKILL.md#work-sequence).
+This checklist is a short project-owner summary for planning and review.
 
 1. **State the measurement outcome.** Identify the user action, business purpose, destination,
 operating regions, consent requirements, and success criteria.
@@ -134,7 +139,8 @@ Each implementation or audit must produce the relevant subset of these artifacts
 - Findings prioritized by impact, with concrete remediation steps.
 - Release, rollback, ownership, and monitoring notes.
 
-Reusable event-contract, audit-report, and reconciliation templates are in [`assets/`](assets/). Run
+Reusable event-contract, audit-report, and reconciliation templates are in [`assets/`](assets/);
+filled audit and inventory examples are in [`examples/`](examples/). Run
 the read-only inventory tool with `python3 scripts/inventory_gtm_export.py
 path/to/container-export.json`; it reports structural checks only and does not validate runtime
 behavior, destination acceptance, consent compliance, or reconciliation. The synthetic scenarios in
@@ -150,6 +156,9 @@ Keep platform links and verification status in one place: [official
 references](references/official-references.md). This environment cannot reach every vendor
 documentation host, so unverified links are labeled accordingly; never claim a page was checked
 unless the page was actually opened.
+
+See the [changelog](CHANGELOG.md) for repository changes and [examples](examples/) for synthetic
+task, event-contract, audit-report, and inventory-output examples.
 
 ## Quick start
 

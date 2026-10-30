@@ -134,6 +134,10 @@ measurement configuration and limits.
 
 - [Website conversion tracking](https://support.google.com/google-ads/answer/6095821?hl=en) —
 conversion setup and implementation options.
+- [Conversion Linker tag](https://support.google.com/tagmanager/answer/7549390?hl=en) — click
+identifier storage behavior and GTM setup; verify consent and domain requirements for the site.
+- [Auto-tagging](https://support.google.com/google-ads/answer/3095550?hl=en) — click identifier
+configuration and current platform behavior.
 - [Enhanced conversions for web](https://support.google.com/google-ads/answer/13258081?hl=en) —
 supported user-provided data and implementation requirements.
 - [Google Ads conversion adjustments](https://support.google.com/google-ads/answer/7686447?hl=en)

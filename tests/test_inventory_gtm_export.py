@@ -25,6 +25,22 @@ class InventoryExportTests(unittest.TestCase):
         self.assertEqual(result["missing_trigger_references"], 1)
         self.assertEqual(result["orphan_triggers"], 0)
         self.assertEqual(result["unanchored_regex_filters"], 1)
+        self.assertEqual(result["sequencing_cycle_groups"], 0)
+
+    def test_sequence_cycle_and_missing_target_are_reported_without_names(self):
+        document = {
+            "containerVersion": {
+                "tag": [
+                    {"tagId": "1", "name": "A", "setupTag": [{"tagName": "B"}]},
+                    {"tagId": "2", "name": "B", "setupTag": [{"tagName": "A"}]},
+                    {"tagId": "3", "name": "C", "teardownTag": [{"tagName": "Missing"}]},
+                ]
+            }
+        }
+        result = inventory(document, json.dumps(document).encode())
+        self.assertEqual(result["sequencing_references"], 3)
+        self.assertEqual(result["sequencing_cycle_groups"], 1)
+        self.assertEqual(result["unresolved_sequencing_references"], 1)
 
     def test_summary_hash_matches_exact_input_bytes(self):
         result = inventory(self.document, self.raw)
