@@ -4,7 +4,7 @@
 
 For each variable, verify type, path/code, Data Layer version, default, returned types, references,
 and availability at the event where it is used. Consider `undefined`, `null`, empty string, zero,
-`false`, unexpected types, and a VTEX API/SDK that is not ready. Prevent a missing value from
+`false`, unexpected types, and a source API/SDK that is not ready. Prevent a missing value from
 breaking a tag or being silently converted to zero.
 
 Follow the prefix convention the user defines:
@@ -15,10 +15,11 @@ Follow the prefix convention the user defines:
 - `Constant | ...` — constant value.
 - `Lookup | ...` — lookup table.
 
-Complete the name with the data domain and purpose in unambiguous language. For financial events,
-distinguish `Order | Transaction ID`, `Occurrence | Event ID`, `Cart | orderFormId`, value in reais,
-and value in centavos. Do not assume `id`, `value`, `total`, or `transaction_id` mean the same thing
-across producers.
+Complete the name with the data domain and purpose in unambiguous language. Distinguish entity
+identity from occurrence identity (for example, an account ID from an event ID). For financial
+events, distinguish order/transaction ID, event ID, cart ID, value in major currency units, and
+value in minor units; `orderFormId` is a VTEX-specific example. Do not assume `id`, `value`, `total`,
+or `transaction_id` mean the same thing across producers.
 
 Use paths that actually exist in the `dataLayer`. `transaction_id`, `transactionId`,
 `ecommerce.transaction_id`, and `orderFormId` are different fields until evidence establishes equal
@@ -27,9 +28,9 @@ meaning. Data from one step (for example, `add_payment_info`) does not prove a f
 
 ## Triggers
 
-Name triggers by role, source, and event, for example `Event | Ecommerce | purchase`, `Event |
-Navigation | pageView | Store`, `DOM Ready | Page view | Checkout`, or `Exception | ...`. Use labels
-that match the actual trigger type.
+Name triggers by role, source, and event, for example `Event | Account | trial_started`, `Event |
+Lead | accepted`, `Event | Ecommerce | purchase`, `Event | Navigation | pageView`, or `Exception |
+...`. Use labels that match the actual trigger type.
 
 Verify type, exact event/capitalization, regex and anchoring, filters, exceptions, referenced tags,
 page conditions, and trigger groups. Multiple triggers on one tag are generally alternative firing

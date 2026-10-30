@@ -1,11 +1,13 @@
 ---
 name: gtm-tracking-konvert
 description: >-
-  Design, implement, and audit Google Tag Manager (GTM) tracking for Web and server-side
-  containers. Use for VTEX, Shopify, WooCommerce, dataLayer, GA4/ecommerce, Consent Mode,
-  Meta Pixel/CAPI, Google Ads Enhanced Conversions, deduplication, templates, the Tag Manager
-  API, and server-side architecture. GTM means Google Tag Manager, not go-to-market. Do not
-  invoke for GA4 reporting without GTM, Adobe Analytics, Segment, or go-to-market strategy.
+  Design, implement, and audit Google Tag Manager (GTM) tracking for websites, web applications,
+  SaaS products, lead-generation flows, content experiences, and commerce using Web or server-side
+  containers. Use for dataLayer, GA4, Consent Mode, Meta Pixel/CAPI, Google Ads conversions,
+  deduplication, templates, the Tag Manager API, and server-side architecture. VTEX, Shopify, and
+  WooCommerce are example source integrations, not required platforms. GTM means Google Tag
+  Manager, not go-to-market. Do not invoke for GA4 reporting without GTM, Adobe Analytics, Segment,
+  or go-to-market strategy.
 metadata:
   short-description: "Google Tag Manager tracking engineering"
 ---
@@ -29,13 +31,13 @@ workflow](references/workflow-web.md).
 - Google Ads conversions or Enhanced Conversions: [Google Ads
   workflow](references/google-ads-conversions.md).
 - Meta Pixel/CAPI pairing or deduplication: [Meta workflow](references/meta-pixel-capi.md).
-- VTEX, Shopify, WooCommerce, or another source integration: [source-platform
-adapters](references/source-platform-adapters.md).
+- Source integration or application event producer: [source integration
+adapters](references/source-integration-adapters.md).
 - JSON export audit: run [`inventory_gtm_export.py`](scripts/inventory_gtm_export.py) for a
 value-free structural summary, then use [audit evidence](references/audit-evidence.md); consult
 [contracts, dependencies, and naming](references/contracts-dependencies-naming.md) when container
 organization matters.
-- SPA, VTEX, consent, or browser investigation: [Web workflow](references/workflow-web.md).
+- SPA, consent, or browser investigation: [Web workflow](references/workflow-web.md).
 - Server-side clients, transformations, templates, infrastructure, or outbound-data privacy: [Server
 workflow](references/workflow-server.md).
 - Permissions, workspaces, environments, API, versioning, or publication: [container governance and
@@ -70,8 +72,10 @@ matrix](references/task-decision-matrix.md) to select a minimal workflow.
 ## Invocation and context policy
 
 Use this skill when the task requires Google Tag Manager configuration, GTM Web/Server behavior, or
-an evidence-based decision about GTM tracking. It applies to commerce sources including VTEX;
-source-specific conventions are examples and must be confirmed from the supplied implementation.
+an evidence-based decision about GTM tracking, regardless of industry or source platform. Common
+projects include marketing sites, web apps, SaaS, lead generation, content, and commerce. Identify
+the actual producer and source contract; do not assume an ecommerce event model, platform, currency,
+or set of business events unless the supplied implementation supports it.
 
 Do not use it for go-to-market strategy, GA4 reporting that does not involve GTM, or implementation
 work centered on Adobe Analytics, Segment, or another tag manager. If the request mentions only

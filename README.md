@@ -2,11 +2,13 @@
 
 **A practical implementation and audit playbook for reliable Google Tag Manager tracking.**
 
-GTM Tracking Konvert is a commerce-first, cross-platform skill for turning measurement requirements
+GTM Tracking Konvert is an industry- and platform-neutral skill for turning measurement requirements
 into explicit event contracts, maintainable Google Tag Manager (GTM) implementations, and verifiable
-data flows. It covers GTM Web and server-side GTM for GA4, Google Ads, and Meta Pixel/Conversions
-API. VTEX and BRL (reais/centavos) are common examples, not assumptions: use the source platform's
-actual contract for every implementation.
+data flows. It supports websites, web applications, SaaS products, lead-generation flows, content
+experiences, and commerce when they use GTM Web or server-side GTM. GA4, Google Ads, and Meta
+Pixel/Conversions API are supported destinations. VTEX, Shopify, ecommerce, and BRL are examples or
+optional specialized topics, never defaults; use the actual source and destination contracts for
+each implementation.
 
 This repository packages the project's operating guide, a routed skill, focused references, reusable
 templates, synthetic evaluation fixtures, and a read-only GTM export inventory tool. It is not an
@@ -21,7 +23,9 @@ destination, and evidence that it behaves as designed.
 ## What this project covers
 
 - GTM Web data-layer design, event naming, triggers, variables, and tags.
-- GA4 recommended events, custom events, ecommerce payloads, and Measurement Protocol.
+- Measurement for page views, navigation, sign-ups, subscriptions, leads, forms, content engagement,
+  and other application-defined business events.
+- GA4 recommended and custom events, optional ecommerce payloads, and Measurement Protocol.
 - Google Ads conversion tracking and browser/server conversion deduplication.
 - Meta Pixel/Conversions API event routing and browser/server deduplication.
 - Consent Mode, consent defaults, consent updates, and consent-aware tag firing.
@@ -43,6 +47,7 @@ compliant measurement by default.
 - A live tracking application or GTM container.
 - Platform-specific field names, currency units, or consent requirements inferred from VTEX, BRL, or
 any other example.
+- Tracking projects that do not use Google Tag Manager.
 
 ## Required implementation workflow
 
@@ -155,6 +160,10 @@ and the expected decision. Example prompts:
 evidence for each finding.”
 - “Create an event contract for this checkout event using the attached producer payload; do not
 invent missing fields.”
+- “Audit the SaaS trial signup flow from application event through GTM to GA4. Separate
+  configuration evidence from observed delivery.”
+- “Design a privacy-aware lead form measurement plan. Distinguish a submitted form from a lead
+  accepted by the backend.”
 - “Investigate whether this Web/Server Meta event pair is deduplicated. Separate configuration from
 destination evidence.”
 - “Review this consent-denied Preview trace against the approved policy. Do not assume denied

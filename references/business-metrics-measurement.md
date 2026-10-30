@@ -1,7 +1,8 @@
 # Business metrics and measurement plans
 
-Use this reference for measurement plans, KPIs, BI/dashboard requirements, data prioritization
-beyond the funnel, or revenue reconciliation.
+Use this reference for measurement plans, KPIs, BI/dashboard requirements, data prioritization,
+product outcomes, or revenue reconciliation. Select a metric model that fits the project's actual
+business and source of truth; ecommerce is one specialized example below.
 
 ## 1. Define each metric before instrumentation
 
@@ -17,9 +18,24 @@ For every dashboard metric, record:
 - known limits (consent, blockers, attribution, cancellations).
 
 Keep denominators and cohorts consistent across periods. A metric without a source and owner does
-not belong on the dashboard.
+not belong on the dashboard. For any project, state the unit of analysis, eligibility rules, lifecycle
+state, time window, and whether the metric measures intent, completion, or a downstream outcome.
 
-## 2. Ecommerce metric tree
+## 2. Choose a metric tree for the project
+
+Examples of non-commerce metric trees:
+
+- **SaaS:** eligible visitors → sign-up started → account created → activated account → retained
+  account → subscription state/revenue.
+- **Lead generation:** eligible visits → form started → form submitted → backend-accepted lead →
+  qualified lead → opportunity or downstream outcome.
+- **Content:** eligible page views → meaningful content engagement → return visits → subscription,
+  registration, or another defined outcome.
+
+Use backend or operational systems for outcomes they own. A client-side click or form submit does
+not prove account activation, accepted lead, qualified lead, or subscription state.
+
+### Ecommerce example
 
 Business outcome → eligible visitors → conversion (`view_item` → `add_to_cart` → `begin_checkout` →
 `add_shipping_info` → `add_payment_info` → `purchase`) → repeat purchase/retention → net revenue and

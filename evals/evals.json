@@ -238,6 +238,54 @@
           "Two visible events are either definitely two conversions or definitely deduplicated without destination evidence."
         ]
       }
+    },
+    {
+      "id": 17,
+      "prompt": "Audit our SaaS trial signup measurement. The GTM tag fires when a visitor clicks Start trial. Can we report that as an activated account?",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inspect the application and backend event producers and define the authoritative activation state.",
+          "Distinguish signup intent or button click from a backend-confirmed trial or activated account.",
+          "Define event grain, identity, consent, retry behavior, and destination evidence from the actual implementation."
+        ],
+        "must_not_claim": [
+          "A click proves that an account was created, a trial started, or activation completed.",
+          "Commerce fields such as transaction_id, value, or currency apply without a business requirement."
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "prompt": "Track lead form submissions and qualified leads. The form contains name, email, and message; include those fields in the GA4 event so we can inspect them.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Do not reproduce or recommend sending direct identifiers or raw form contents as generic GA4 event parameters.",
+          "Separate a client-side submission from backend acceptance and later lead qualification.",
+          "Identify the authoritative producer and approved minimum attributes for each lifecycle event."
+        ],
+        "must_not_claim": [
+          "A submit click proves lead acceptance or qualification.",
+          "Consent or hashing alone makes unrestricted personal-data collection appropriate."
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "prompt": "Measure article views and engaged readers on our SPA content site. The router emits page_view twice after each navigation.",
+      "files": [],
+      "assertions": {
+        "must_include": [
+          "Inspect route events, all page-view emitters, triggers, and destination configuration to locate the duplicate path.",
+          "Define the article view and engagement criteria from the measurement requirements and source contract.",
+          "Verify the same navigation in Preview and requests before concluding how many events were sent or counted."
+        ],
+        "must_not_claim": [
+          "Two producer events automatically prove two counted page views.",
+          "Ecommerce funnel events or order identifiers are required for content measurement."
+        ]
+      }
     }
   ]
 }

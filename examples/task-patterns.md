@@ -3,6 +3,31 @@
 These examples demonstrate reasoning patterns. Names, IDs, and payloads are synthetic; they do not
 describe a customer implementation. They are not proof that a production platform behaves the same.
 
+## SaaS signup and activation
+
+**Prompt:** “Measure trial starts and account activations in our SaaS app.”
+
+**Expected response pattern:** inspect the actual frontend and backend producers; distinguish a
+button click from a backend-confirmed trial or activated account; define event grain, identity,
+consent, retries, and destinations from evidence. Do not assume ecommerce fields such as `value`,
+`currency`, or `transaction_id` apply.
+
+## Lead form submission
+
+**Prompt:** “Track lead form submissions and tell us which ones become qualified leads.”
+
+**Expected response pattern:** separate form interaction/submission from backend acceptance and later
+qualification. Use the approved minimum fields, avoid copying form contents or direct identifiers
+into analytics, and identify which system is authoritative for each stage.
+
+## Content engagement
+
+**Prompt:** “Measure article views and meaningful engagement in our content site.”
+
+**Expected response pattern:** inspect page and content producers, define a view and engagement
+threshold from the measurement requirements, account for SPA route changes and repeat events, and
+validate the data flow. Do not assume a commerce funnel.
+
 ## Duplicate purchase investigation
 
 **Prompt:** “Two GTM tags appear to send `purchase`. Is the order counted twice?”

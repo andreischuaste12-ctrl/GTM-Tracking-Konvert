@@ -154,9 +154,10 @@ Confirm exact event name, ID field/casing, user-data handling, consent, diagnost
 deduplication requirements in the current Meta docs. Never infer acceptance from an HTTP response
 alone.
 
-## Source commerce platforms
+## Example commerce source platforms
 
-The skill is source-platform-neutral. Use a platform's current official contract and installed
+These commerce platforms are examples, not an exhaustive list or a default assumption. The skill
+supports any project that uses GTM. Use the actual source's current official contract and installed
 implementation; never copy fields such as VTEX `orderFormId` into another platform's schema.
 
 - [VTEX developer documentation](https://developers.vtex.com/docs/) — search for the installed

@@ -25,10 +25,10 @@
 
 ## Identity
 
-| Identifier | Source field | Scope | Stable across retries? | Destination use |
+| Identifier (event, user/account, lead, order, item, etc.) | Source field | Scope | Stable across retries? | Destination use |
 |---|---|---|---|---|
 | Event ID | | | | |
-| Entity ID (order/item/payment) | | | | |
+| Entity ID (account/lead/subscription/order/item/etc.) | | | | |
 
 ## Parameters
 
